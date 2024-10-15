@@ -36,6 +36,4 @@ public class GenericDao {
         System.out.println(obj + " Deleted!");
     }
 
-
-
 }
