@@ -33,7 +33,7 @@ public class Mezzo {
     private List<Biglietto> biglietti;
 
     @OneToMany(mappedBy = "mezzo")
-    private List<Periodo> lista_periodi;
+    private List<Periodo> lista_periodi = new ArrayList<>();
 
 
     public Mezzo() {

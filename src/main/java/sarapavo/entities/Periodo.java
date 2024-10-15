@@ -24,8 +24,12 @@ public class Periodo {
 
     public Periodo(Mezzo m){
         this.mezzo = m;
-        setIs_maintance(!m.getLista_periodi().getLast().isIs_maintance());
-        m.getLista_periodi().getLast().setData_fine(this.data_inizio);
+        if(m.getLista_periodi() != null ){
+            setIs_maintance(!m.getLista_periodi().getLast().isIs_maintance());
+            m.getLista_periodi().getLast().setData_fine(this.data_inizio);
+        }else{
+            setIs_maintance(true);
+        }
     }
 
     public long getId() {

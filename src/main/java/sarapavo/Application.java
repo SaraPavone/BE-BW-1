@@ -131,10 +131,5 @@ public class Application {
         dao.save(abbonamento3);
         dao.save(abbonamento4);
         dao.save(abbonamento5);
-
-
-
-
-
     }
 }
