@@ -27,15 +27,15 @@ public class Application {
 //        dao.save(new User("Andrea", "Gialli", LocalDate.of(2000, 3, 30), true));
 
         User user1 = new User("Giovanni", "Rosa", LocalDate.of(1990, 4, 12), false);
-        dao.save(user1);
+//        dao.save(user1);
         User user2 = new User("Anna", "Blu", LocalDate.of(1980, 7, 9), false);
-        dao.save(user2);
+//        dao.save(user2);
         User user3 = new User("Giorgia", "Verdi", LocalDate.of(1975, 11, 22), false);
-        dao.save(user3);
+//        dao.save(user3);
         User user4 = new User("Sandro", "Giallo", LocalDate.of(1999, 8, 15), true);
-        dao.save(user4);
+//        dao.save(user4);
         User user5 = new User("Franco", "Nero", LocalDate.of(1985, 1, 30), false);
-        dao.save(user5);
+//        dao.save(user5);
 //        dao.save(new Tessera(user1));
 //        dao.save(new Tessera(user2));
 //        dao.save(new Tessera(user3));
@@ -47,11 +47,11 @@ public class Application {
         Tessera t3 = new Tessera(user3);
         Tessera t4 = new Tessera(user4);
         Tessera t5 = new Tessera(user5);
-        dao.save(t1);
-        dao.save(t2);
-        dao.save(t3);
-        dao.save(t4);
-        dao.save(t5);
+//        dao.save(t1);
+//        dao.save(t2);
+//        dao.save(t3);
+//        dao.save(t4);
+//        dao.save(t5);
 
 //        dao.save(new DistributoreAutomatico("Punto K",false));
 //        dao.save(new Rivenditore("Punto L"));
