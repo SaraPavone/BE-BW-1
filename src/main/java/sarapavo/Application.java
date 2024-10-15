@@ -110,26 +110,29 @@ public class Application {
 //        dao.save(tratta4);
 //        dao.save(tratta5);
 
-        Biglietto biglietto1 = new Biglietto(LocalDate.of(2024, 10, 10), new DistributoreAutomatico("Punto F", true), tram1);
-        Biglietto biglietto2 = new Biglietto(LocalDate.of(2024, 10, 11), new Rivenditore("Punto G"), autobus1);
-        Biglietto biglietto3 = new Biglietto(LocalDate.of(2024, 10, 12), new DistributoreAutomatico("Punto H", true), tram1);
-        Biglietto biglietto4 = new Biglietto(LocalDate.of(2024, 10, 13), new Rivenditore("Punto I"), autobus1);
-        Biglietto biglietto5 = new Biglietto(LocalDate.of(2024, 10, 14), new DistributoreAutomatico("Punto J", false), tram1);
-        dao.save(biglietto1);
+
+        DistributoreAutomatico da1 = new DistributoreAutomatico("Punto F", true);
+        Rivenditore r1 = new Rivenditore("Punto H");
+        Rivenditore r2 = new Rivenditore("Punto ciao");
+        DistributoreAutomatico da505043 = new DistributoreAutomatico("Punto F", false);
+        Biglietto biglietto2 = new Biglietto(LocalDate.of(2024, 10, 11), da1, autobus1);
+        Biglietto biglietto3 = new Biglietto(LocalDate.of(2024, 10, 12),r1 , tram1);
+        Biglietto biglietto4 = new Biglietto(LocalDate.of(2024, 10, 13), r2, autobus1);
+        Biglietto biglietto5 = new Biglietto(LocalDate.of(2024, 10, 14),da505043, tram1);
         dao.save(biglietto2);
         dao.save(biglietto3);
         dao.save(biglietto4);
         dao.save(biglietto5);
 
-        Abbonamento abbonamento1 = new Abbonamento(new Tessera(new User("Mario", "Rossi", LocalDate.of(1985, 5, 20), false)), TipiAbbonamento.SETTIMANALE, new DistributoreAutomatico("Punto A", true));
-        Abbonamento abbonamento2 = new Abbonamento(new Tessera(new User("Lucia", "Bianchi", LocalDate.of(1990, 3, 10), false)), TipiAbbonamento.MENSILE, new Rivenditore("Punto B"));
-        Abbonamento abbonamento3 = new Abbonamento(new Tessera(new User("Paolo", "Verdi", LocalDate.of(2000, 7, 15), false)), TipiAbbonamento.ANNUALE, new DistributoreAutomatico("Punto C", false));
-        Abbonamento abbonamento4 = new Abbonamento(new Tessera(new User("Gina", "Neri", LocalDate.of(1995, 1, 25), false)), TipiAbbonamento.SETTIMANALE, new Rivenditore("Punto D"));
-        Abbonamento abbonamento5 = new Abbonamento(new Tessera(new User("Luca", "Gialli", LocalDate.of(1988, 12, 5), false)), TipiAbbonamento.MENSILE, new DistributoreAutomatico("Punto E", true));
-        dao.save(abbonamento1);
-        dao.save(abbonamento2);
-        dao.save(abbonamento3);
-        dao.save(abbonamento4);
-        dao.save(abbonamento5);
+//        Abbonamento abbonamento1 = new Abbonamento(new Tessera(new User("Mario", "Rossi", LocalDate.of(1985, 5, 20), false)), TipiAbbonamento.SETTIMANALE, new DistributoreAutomatico("Punto A", true));
+//        Abbonamento abbonamento2 = new Abbonamento(new Tessera(new User("Lucia", "Bianchi", LocalDate.of(1990, 3, 10), false)), TipiAbbonamento.MENSILE, new Rivenditore("Punto B"));
+//        Abbonamento abbonamento3 = new Abbonamento(new Tessera(new User("Paolo", "Verdi", LocalDate.of(2000, 7, 15), false)), TipiAbbonamento.ANNUALE, new DistributoreAutomatico("Punto C", false));
+//        Abbonamento abbonamento4 = new Abbonamento(new Tessera(new User("Gina", "Neri", LocalDate.of(1995, 1, 25), false)), TipiAbbonamento.SETTIMANALE, new Rivenditore("Punto D"));
+//        Abbonamento abbonamento5 = new Abbonamento(new Tessera(new User("Luca", "Gialli", LocalDate.of(1988, 12, 5), false)), TipiAbbonamento.MENSILE, new DistributoreAutomatico("Punto E", true));
+//        dao.save(abbonamento1);
+//        dao.save(abbonamento2);
+//        dao.save(abbonamento3);
+//        dao.save(abbonamento4);
+//        dao.save(abbonamento5);
     }
 }
