@@ -48,18 +48,18 @@ public class Application {
 //        dao.save(new Rivenditore("Punto N"));
 //        dao.save(new DistributoreAutomatico("Punto O",false));
 
-        dao.save(new DistributoreAutomatico("Distributore 1", false));
-        dao.save(new DistributoreAutomatico("Distributore 2", true));
-        dao.save(new DistributoreAutomatico("Distributore 3", false));
-        dao.save(new DistributoreAutomatico("Distributore 4", true));
-        dao.save(new DistributoreAutomatico("Distributore 5", false));
-//
-//                dao.save(new ParcoMezzi(new ArrayList<>()));
-//        dao.save(new Periodo(new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), null, new ArrayList<>())));
-//        dao.save(new Periodo(new Mezzo(TipoMezzi.AUTOBUS, true, new ArrayList<>(), null, new ArrayList<>())));
-//        dao.save(new Periodo(new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), null, new ArrayList<>())));
-//        dao.save(new Periodo(new Mezzo(TipoMezzi.AUTOBUS, true, new ArrayList<>(), null, new ArrayList<>())));
-//        dao.save(new Periodo(new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), null, new ArrayList<>())));
+//        dao.save(new DistributoreAutomatico("Distributore 1", false));
+//        dao.save(new DistributoreAutomatico("Distributore 2", true));
+//        dao.save(new DistributoreAutomatico("Distributore 3", false));
+//        dao.save(new DistributoreAutomatico("Distributore 4", true));
+//        dao.save(new DistributoreAutomatico("Distributore 5", false));
+
+        dao.save(new ParcoMezzi(new ArrayList<>()));
+        dao.save(new Periodo(new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), null, new ArrayList<>())));
+        dao.save(new Periodo(new Mezzo(TipoMezzi.AUTOBUS, true, new ArrayList<>(), null, new ArrayList<>())));
+        dao.save(new Periodo(new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), null, new ArrayList<>())));
+        dao.save(new Periodo(new Mezzo(TipoMezzi.AUTOBUS, true, new ArrayList<>(), null, new ArrayList<>())));
+        dao.save(new Periodo(new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), null, new ArrayList<>())));
 //
 //
 //        dao.save(new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), null, new ArrayList<>()));
