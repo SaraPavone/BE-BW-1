@@ -24,7 +24,7 @@ public class Periodo {
 
     public Periodo(Mezzo m){
         this.mezzo = m;
-        if(m.getLista_periodi() != null ){
+        if(m.getLista_periodi() != null && !m.getLista_periodi().isEmpty()){
             setIs_maintance(!m.getLista_periodi().getLast().isIs_maintance());
             m.getLista_periodi().getLast().setData_fine(this.data_inizio);
         }else{
