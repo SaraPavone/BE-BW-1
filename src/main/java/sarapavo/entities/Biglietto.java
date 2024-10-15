@@ -24,4 +24,6 @@ public class Biglietto {
     @JoinColumn(name = "mezzo_id")
     private Mezzo mezzo;
 
+    
+
 }

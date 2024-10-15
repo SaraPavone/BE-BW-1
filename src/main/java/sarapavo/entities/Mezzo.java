@@ -101,6 +101,18 @@ public class Mezzo {
         this.parcomezzi = parcomezzi;
     }
 
+    public List<Periodo> getLista_periodi() {
+        return lista_periodi;
+    }
+
+    public void setLista_periodi(List<Periodo> lista_periodi) {
+        this.lista_periodi = lista_periodi;
+    }
+
+    public void addPeriodo(Periodo p){
+        this.lista_periodi.add(p);
+    }
+
     @Override
     public String toString() {
         return "Mezzo{" +

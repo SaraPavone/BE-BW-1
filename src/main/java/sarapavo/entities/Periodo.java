@@ -11,8 +11,8 @@ public class Periodo {
     @GeneratedValue
     private long id;
 
-    private LocalDate data_inizio;
-    private LocalDate data_fine;
+    private LocalDate data_inizio = LocalDate.now();
+    private LocalDate data_fine = null;
     private boolean is_maintance;
 
     @ManyToOne
@@ -20,6 +20,11 @@ public class Periodo {
     private Mezzo mezzo;
 
     public Periodo() {
+    }
+    public Periodo(Mezzo m){
+        this.mezzo = m;
+        setIs_maintance(!m.getLista_periodi().getLast().isIs_maintance());
+        m.getLista_periodi().getLast().setData_fine(this.data_inizio);
     }
 
     public long getId() {
