@@ -56,11 +56,11 @@ public class Application {
 //        dao.save(new Rivenditore("Punto N"));
 //        dao.save(new DistributoreAutomatico("Punto O",false));
 //
-//        dao.save(new Tessera(new User("Giovanni", "Rosa", LocalDate.of(1990, 4, 12), false)));
-//        dao.save(new Tessera(new User("Anna", "Blu", LocalDate.of(1980, 7, 9), false)));
-//        dao.save(new Tessera(new User("Giorgia", "Verdi", LocalDate.of(1975, 11, 22), false)));
-//        dao.save(new Tessera(new User("Sandro", "Giallo", LocalDate.of(1999, 8, 15), false)));
-//        dao.save(new Tessera(new User("Franco", "Nero", LocalDate.of(1985, 1, 30), false)));
+        dao.save(new Tessera(new User("Giovanni", "Rosa", LocalDate.of(1990, 4, 12), false)));
+        dao.save(new Tessera(new User("Anna", "Blu", LocalDate.of(1980, 7, 9), false)));
+        dao.save(new Tessera(new User("Giorgia", "Verdi", LocalDate.of(1975, 11, 22), false)));
+        dao.save(new Tessera(new User("Sandro", "Giallo", LocalDate.of(1999, 8, 15), true)));
+        dao.save(new Tessera(new User("Franco", "Nero", LocalDate.of(1985, 1, 30), false)));
 //
 //        dao.save(new Tratta(new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), null, new ArrayList<>()), 30, "Capolinea A", "Zona 1"));
 //        dao.save(new Tratta(new Mezzo(TipoMezzi.AUTOBUS, true, new ArrayList<>(), null, new ArrayList<>()), 45, "Capolinea B", "Zona 2"));
@@ -74,7 +74,7 @@ public class Application {
 //        dao.save(new User("Giulia", "Neri", LocalDate.of(1993, 8, 5), false));
 //        dao.save(new User("Andrea", "Gialli", LocalDate.of(2000, 3, 30), true));
 
-        
+
 
     }
 }
