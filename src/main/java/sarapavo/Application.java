@@ -54,7 +54,8 @@ public class Application {
 //        dao.save(new DistributoreAutomatico("Distributore 4", true));
 //        dao.save(new DistributoreAutomatico("Distributore 5", false));
 
-//        dao.save(new ParcoMezzi(new ArrayList<>()));
+        ParcoMezzi greenPark  = new ParcoMezzi(new ArrayList<>());
+        dao.save(greenPark);
 
 //        dao.save(new Periodo(new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), null, new ArrayList<>())));
 //        dao.save(new Periodo(new Mezzo(TipoMezzi.AUTOBUS, true, new ArrayList<>(), null, new ArrayList<>())));
@@ -86,10 +87,10 @@ public class Application {
 //        dao.save(new Abbonamento(new Tessera(new User("Gina", "Neri", LocalDate.of(1995, 1, 25), false)), TipiAbbonamento.SETTIMANALE, new Rivenditore("Punto D")));
 //        dao.save(new Abbonamento(new Tessera(new User("Luca", "Gialli", LocalDate.of(1988, 12, 5), false)), TipiAbbonamento.MENSILE, new DistributoreAutomatico("Punto E",true)));
 
-        Mezzo tram1 = new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), null, new ArrayList<>());
-        Mezzo autobus1 = new Mezzo(TipoMezzi.AUTOBUS, true, new ArrayList<>(), null, new ArrayList<>());
-//        dao.save(tram1);
-//        dao.save(autobus1);
+        Mezzo tram1 = new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), greenPark, new ArrayList<>());
+        Mezzo autobus1 = new Mezzo(TipoMezzi.AUTOBUS, true, new ArrayList<>(), greenPark, new ArrayList<>());
+        dao.save(tram1);
+        dao.save(autobus1);
 //        dao.save(tram1);
 //        dao.save(autobus1);
 //        dao.save(tram1);
