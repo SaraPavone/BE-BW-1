@@ -20,7 +20,7 @@ public class Biglietto {
     @JoinColumn(name = "punto_emissione_id")
     private PuntoEmissione punto_emisssione;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "mezzo_id")
     private Mezzo mezzo;
 
