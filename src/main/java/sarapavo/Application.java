@@ -145,10 +145,10 @@ public class Application {
         Abbonamento abbonamento3 = new Abbonamento(t3, TipiAbbonamento.ANNUALE, da505043);
         Abbonamento abbonamento4 = new Abbonamento(t4, TipiAbbonamento.SETTIMANALE, r2);
         Abbonamento abbonamento5 = new Abbonamento(t5, TipiAbbonamento.MENSILE, da1);
-//        dao.save(abbonamento1);
-//        dao.save(abbonamento2);
-//        dao.save(abbonamento3);
-//        dao.save(abbonamento4);
-//        dao.save(abbonamento5);
+        dao.save(abbonamento1);
+        dao.save(abbonamento2);
+        dao.save(abbonamento3);
+        dao.save(abbonamento4);
+        dao.save(abbonamento5);
     }
 }
