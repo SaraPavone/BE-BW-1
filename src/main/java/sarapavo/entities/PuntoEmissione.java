@@ -2,6 +2,9 @@ package sarapavo.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "punti_emissione")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -15,6 +18,12 @@ public abstract class PuntoEmissione {
     private long id;
 
     private String nome_punto_emissione;
+
+    @OneToMany(mappedBy = "punto_emissione")
+    private List<Abbonamento> abbonamenti= new ArrayList<>();
+
+    @OneToMany(mappedBy = "punto_emisssione")
+    private List<Biglietto> biglietti;
 
     public PuntoEmissione() {
     }

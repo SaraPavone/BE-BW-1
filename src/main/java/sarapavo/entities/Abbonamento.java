@@ -18,7 +18,8 @@ public class Abbonamento {
     private LocalDate data_emissione;
     private LocalDate data_scadenza;
 
-    // aggiungere relazione
+    @ManyToOne
+    @JoinColumn(name = "punto_emissione_id")
     private PuntoEmissione punto_emissione;
 
     @OneToOne(mappedBy = "abbonamento")
