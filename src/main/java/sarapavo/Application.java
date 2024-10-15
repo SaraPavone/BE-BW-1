@@ -88,16 +88,16 @@ public class Application {
 
         Mezzo tram1 = new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), null, new ArrayList<>());
         Mezzo autobus1 = new Mezzo(TipoMezzi.AUTOBUS, true, new ArrayList<>(), null, new ArrayList<>());
-        dao.save(new Periodo(tram1));
-        dao.save(new Periodo(autobus1));
-        dao.save(new Periodo(tram1));
-        dao.save(new Periodo(autobus1));
-        dao.save(new Periodo(tram1));
         dao.save(tram1);
         dao.save(autobus1);
         dao.save(tram1);
         dao.save(autobus1);
         dao.save(tram1);
+        dao.save(new Periodo(tram1));
+        dao.save(new Periodo(autobus1));
+        dao.save(new Periodo(tram1));
+        dao.save(new Periodo(autobus1));
+        dao.save(new Periodo(tram1));
 
         Tratta tratta1 = new Tratta(tram1, 30, "Capolinea A", "Zona 1");
         Tratta tratta2 = new Tratta(autobus1, 45, "Capolinea B", "Zona 2");
