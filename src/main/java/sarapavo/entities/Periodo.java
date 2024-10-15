@@ -21,6 +21,7 @@ public class Periodo {
 
     public Periodo() {
     }
+
     public Periodo(Mezzo m){
         this.mezzo = m;
         setIs_maintance(!m.getLista_periodi().getLast().isIs_maintance());
