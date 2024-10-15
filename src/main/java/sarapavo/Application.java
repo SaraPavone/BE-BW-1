@@ -89,8 +89,8 @@ public class Application {
 
         Mezzo tram1 = new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), greenPark, new ArrayList<>());
         Mezzo autobus1 = new Mezzo(TipoMezzi.AUTOBUS, true, new ArrayList<>(), greenPark, new ArrayList<>());
-        dao.save(tram1);
-        dao.save(autobus1);
+//        dao.save(tram1);
+//        dao.save(autobus1);
 //        dao.save(tram1);
 //        dao.save(autobus1);
 //        dao.save(tram1);
@@ -116,6 +116,10 @@ public class Application {
         Rivenditore r1 = new Rivenditore("Punto H");
         Rivenditore r2 = new Rivenditore("Punto ciao");
         DistributoreAutomatico da505043 = new DistributoreAutomatico("Punto F", false);
+        dao.save(da1);
+        dao.save(r1);
+        dao.save(r2);
+        dao.save(da505043);
         Biglietto biglietto2 = new Biglietto(LocalDate.of(2024, 10, 11), da1, autobus1);
         Biglietto biglietto3 = new Biglietto(LocalDate.of(2024, 10, 12),r1 , tram1);
         Biglietto biglietto4 = new Biglietto(LocalDate.of(2024, 10, 13), r2, autobus1);
