@@ -10,7 +10,17 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_punto_emissione")
 
-
+@NamedQueries({
+        @NamedQuery(
+                name = "countBandB",
+                query = "SELECT p.nome_punto_emissione, COUNT(b.id), COUNT(a.id)" +
+                        "FROM PuntoEmissione p " +
+                        "LEFT JOIN p.biglietti b " +
+                        "LEFT JOIN p.abbonamenti a" +
+                        "GROUP BY p.nome_punto_emissione"
+        )
+}
+)
 public abstract class PuntoEmissione {
 
     @Id

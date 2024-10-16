@@ -3,6 +3,7 @@ package sarapavo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import sarapavo.dao.DaoPE;
 import sarapavo.dao.GenericDao;
 import sarapavo.entities.*;
 import sarapavo.entities.enums.TipiAbbonamento;
@@ -10,6 +11,7 @@ import sarapavo.entities.enums.TipoMezzi;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Application {
 
@@ -18,6 +20,7 @@ public class Application {
 
         EntityManager em =  emf.createEntityManager();
         GenericDao dao  = new GenericDao(em);
+        DaoPE daope = new DaoPE(em);
 
 
 //        dao.save(new User("Maria", "Rossi", LocalDate.of(1985, 12, 10), false));
@@ -151,9 +154,14 @@ public class Application {
 //        dao.save(abbonamento4);
 //        dao.save(abbonamento5);
 
-        Tessera t1Fromdb = dao.getElementById(Tessera.class,1L);
-//          dao.update(t1Fromdb,dao.getElementById(Abbonamento.class, 2L));
-        PuntoEmissione r1Fromdb=dao.getElementById(PuntoEmissione.class,52L);
-        dao.save(new Abbonamento(t1Fromdb,TipiAbbonamento.MENSILE,r1Fromdb));
+//        Tessera t1Fromdb = dao.getElementById(Tessera.class,1L);
+////          dao.update(t1Fromdb,dao.getElementById(Abbonamento.class, 2L));
+//        PuntoEmissione r1Fromdb=dao.getElementById(PuntoEmissione.class,52L);
+//        dao.save(new Abbonamento(t1Fromdb,TipiAbbonamento.MENSILE,r1Fromdb));
+
+        List<Object[]> risultati =daope.getNumeroBigliettoAndAbbonamenti();
+        for(Object[] risultato:risultati){
+            System.out.println(risultato);
+        }
     }
 }

@@ -25,7 +25,7 @@ public class GenericDao {
         System.out.println(obj + "Saved!!");
     }
 
-    public <T> T getElementById(Class<T> entityClass, long id) throws Exception{
+    public <T> T getElementById (Class<T> entityClass, long id) throws Exception{
         T found = geppetto.find(entityClass, id);
         if(found==null) throw new Exception("Not found");
         return found;
@@ -40,8 +40,7 @@ public class GenericDao {
         System.out.println(obj + " Deleted!");
     }
 
-
-    public <E,V> void update(E entity, String attributeName, V newValue, String field, Object value) throws Exception{
+    public <E, V> void update (E entity, String attributeName, V newValue, String field, Object value) throws Exception{
         EntityTransaction transaction = geppetto.getTransaction();
         transaction.begin();
 

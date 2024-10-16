@@ -15,9 +15,7 @@ public class ParcoMezzi {
     @OneToMany(mappedBy = "parcomezzi",cascade = CascadeType.ALL)
     private List<Mezzo> mezzi;
 
-
-    public ParcoMezzi() {
-    }
+    public ParcoMezzi() {}
 
     public ParcoMezzi(List<Mezzo> mezzi) {
         this.mezzi = mezzi;

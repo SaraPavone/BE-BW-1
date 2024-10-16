@@ -19,8 +19,7 @@ public class Periodo {
     @JoinColumn(name = "mezzo_id")
     private Mezzo mezzo;
 
-    public Periodo() {
-    }
+    public Periodo() {}
 
     public Periodo(Mezzo m){
         this.mezzo = m;
