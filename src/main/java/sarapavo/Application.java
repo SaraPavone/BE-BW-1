@@ -6,7 +6,9 @@ import jakarta.persistence.Persistence;
 import sarapavo.dao.DaoAbbonamenti;
 import sarapavo.dao.DaoPE;
 import sarapavo.dao.GenericDao;
+import sarapavo.entities.Biglietto;
 import sarapavo.entities.Mezzo;
+import sarapavo.entities.User;
 import sarapavo.utils.Autogestionale;
 
 import java.time.LocalDate;
@@ -26,10 +28,10 @@ public class Application {
         System.out.println("Benvenuti in MyTransport!");
         System.out.println("Inserisci il tuo ID:");
         long id = Long.parseLong(scanner.nextLine());
-        //User userFound = dao.getElementById(User.class, id);
+        User userFound = dao.getElementById(User.class, id);
 
-        if (true) {
-            switch (Autogestionale.menuSelezione(scanner, "Gestione mezzi, Statistiche")) {
+        if (userFound.getAdmin()) {
+            switch (Autogestionale.menuSelezione(scanner, "Gestione mezzi,Statistiche")) {
                 case 1:
                     System.out.println("Lista mezzi ____ DA COMPLETARE");
 
@@ -55,7 +57,7 @@ public class Application {
                 case 2:
                     System.out.println("Statistiche generali ____ DA COMPLETARE");
                     System.out.println("Statistiche per lasso di tempo: ");
-                    switch (Autogestionale.menuSelezione(scanner, "Numero biglietti vidimati, Numero biglietti e abbonamenti emessi ")) {
+                    switch (Autogestionale.menuSelezione(scanner, "Numero biglietti vidimati,Numero biglietti e abbonamenti emessi ")) {
                         case 1:
                             System.out.println("Inserisci il periodo da verificare: ");
                             System.out.println("Inserisci la data di inizio ( AAAA-MM-GG ): ");
@@ -76,6 +78,23 @@ public class Application {
                             dataFineF = LocalDate.parse(dataFine);
                             System.out.println(dataInizioF + " " + dataFineF);
                             break;
+                    }
+            }
+        } else if (!userFound.getAdmin()) {
+            System.out.println("Cosa vuoi fare? ");
+            switch (Autogestionale.menuSelezione(scanner, "Vidimare,Acquistare,Verifica abbonamento ")) {
+                case 1:
+                    switch (Autogestionale.menuSelezione(scanner, "Hai il biglietto?\nsi,no ")) {
+
+                        case 1:
+                            System.out.println("Inserisci il numero del biglietto: ");
+                            long numBiglietto = Long.parseLong(scanner.nextLine());
+                            Biglietto bigliettoFound = dao.getElementById(Biglietto.class, numBiglietto);
+                            System.out.println("Elenco tratte ____ DA COMPLETARE");
+                            System.out.println("Seleziona una tratta: ");
+                            bigliettoFound.setData_vidimazione(LocalDate.now());
+                            //SIAMO ARRIVATI QUI, DOMANI ANDIAMO AVANTI, DOBBIAMO SOSTITUIRE IL SETDATA CON IL GENERICS UPDATE
+
                     }
             }
         }

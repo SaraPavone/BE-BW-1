@@ -24,10 +24,10 @@ public class Biglietto {
     @JoinColumn(name = "mezzo_id")
     private Mezzo mezzo;
 
-    public Biglietto(){}
+    public Biglietto() {
+    }
 
-    public Biglietto(LocalDate data_vidimazione, PuntoEmissione punto_emisssione, Mezzo mezzo) {
-        this.data_vidimazione = data_vidimazione;
+    public Biglietto(PuntoEmissione punto_emisssione, Mezzo mezzo) {
         this.punto_emisssione = punto_emisssione;
         this.mezzo = mezzo;
     }
