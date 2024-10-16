@@ -15,8 +15,6 @@ import java.util.List;
                 name = "countBandB",
                 query = "SELECT p.nome_punto_emissione, COUNT(b.id), COUNT(a.id)" +
                         "FROM PuntoEmissione p " +
-                        "LEFT JOIN p.biglietti b " +
-                        "LEFT JOIN p.abbonamenti a" +
                         "GROUP BY p.nome_punto_emissione"
         )
 }

@@ -159,7 +159,7 @@ public class Application {
 //        PuntoEmissione r1Fromdb=dao.getElementById(PuntoEmissione.class,52L);
 //        dao.save(new Abbonamento(t1Fromdb,TipiAbbonamento.MENSILE,r1Fromdb));
 
-        List<Object[]> risultati =daope.getNumeroBigliettoAndAbbonamenti();
+        List<Object[]> risultati = daope.getNumeroBigliettoAndAbbonamenti();
         for(Object[] risultato:risultati){
             System.out.println(risultato);
         }
