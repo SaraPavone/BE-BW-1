@@ -16,13 +16,19 @@ import java.util.List;
 
 public class Application {
 
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("be_bw_1");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("giovanni");
+
+
     public static void main(String[] args) throws Exception {
 
         EntityManager em =  emf.createEntityManager();
         GenericDao dao  = new GenericDao(em);
         DaoPE daope = new DaoPE(em);
-        DaoAbbonamenti abbonamentidao = new DaoAbbonamenti(em);
+//        dao.populate();
+
+        daope.getNumeroBigliettoAndAbbonamenti();
+
+
 
 
     }

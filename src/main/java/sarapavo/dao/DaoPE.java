@@ -7,13 +7,20 @@ import java.util.List;
 
 public class DaoPE {
 
-    private final EntityManager penocchio;
+    private final EntityManager em;
     public DaoPE(EntityManager em){
-        this.penocchio = em;
+        this.em = em;
     }
 
-    public List<Object[]> getNumeroBigliettoAndAbbonamenti(){
-        TypedQuery<Object[]> query = penocchio.createNamedQuery("countBandB", Object[].class);
-        return query.getResultList();
+    public void getNumeroBigliettoAndAbbonamenti(){
+        TypedQuery<Object[]> query = em.createNamedQuery("PuntoEmissione.countTicketsAndSubscriptions", Object[].class);
+        for (Object[] risultato : query.getResultList()) {
+            String nomePuntoEmissione = (String) risultato[0];
+            Long numeroBiglietti = (Long) risultato[1];
+            System.out.println("Punto Emissione: " + nomePuntoEmissione +
+                    ", Numero Abbonamenti: " + numeroBiglietti);
+        }
     }
+
+
 }
