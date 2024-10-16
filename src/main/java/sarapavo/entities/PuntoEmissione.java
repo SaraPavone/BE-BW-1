@@ -20,7 +20,7 @@ public abstract class PuntoEmissione {
     private String nome_punto_emissione;
 
     @OneToMany(mappedBy = "punto_emissione")
-    private List<Abbonamento> abbonamenti= new ArrayList<>();
+    private List<Abbonamento> abbonamenti;
 
     @OneToMany(mappedBy = "punto_emisssione")
     private List<Biglietto> biglietti;

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Application {
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("be_bw_1");
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         EntityManager em =  emf.createEntityManager();
         GenericDao dao  = new GenericDao(em);
@@ -26,15 +26,15 @@ public class Application {
 //        dao.save(new User("Giulia", "Neri", LocalDate.of(1993, 8, 5), false));
 //        dao.save(new User("Andrea", "Gialli", LocalDate.of(2000, 3, 30), true));
 
-        User user1 = new User("Giovanni", "Rosa", LocalDate.of(1990, 4, 12), false);
+//        User user1 = new User("Giovanni", "Rosa", LocalDate.of(1990, 4, 12), false);
 //        dao.save(user1);
-        User user2 = new User("Anna", "Blu", LocalDate.of(1980, 7, 9), false);
+//        User user2 = new User("Anna", "Blu", LocalDate.of(1980, 7, 9), false);
 //        dao.save(user2);
-        User user3 = new User("Giorgia", "Verdi", LocalDate.of(1975, 11, 22), false);
+//        User user3 = new User("Giorgia", "Verdi", LocalDate.of(1975, 11, 22), false);
 //        dao.save(user3);
-        User user4 = new User("Sandro", "Giallo", LocalDate.of(1999, 8, 15), true);
+//        User user4 = new User("Sandro", "Giallo", LocalDate.of(1999, 8, 15), true);
 //        dao.save(user4);
-        User user5 = new User("Franco", "Nero", LocalDate.of(1985, 1, 30), false);
+//        User user5 = new User("Franco", "Nero", LocalDate.of(1985, 1, 30), false);
 //        dao.save(user5);
 //        dao.save(new Tessera(user1));
 //        dao.save(new Tessera(user2));
@@ -42,11 +42,11 @@ public class Application {
 //        dao.save(new Tessera(user4));
 //        dao.save(new Tessera(user5));
 
-        Tessera t1 = new Tessera(user1);
-        Tessera t2 = new Tessera(user2);
-        Tessera t3 = new Tessera(user3);
-        Tessera t4 = new Tessera(user4);
-        Tessera t5 = new Tessera(user5);
+//        Tessera t1 = new Tessera(user1);
+//        Tessera t2 = new Tessera(user2);
+//        Tessera t3 = new Tessera(user3);
+//        Tessera t4 = new Tessera(user4);
+//        Tessera t5 = new Tessera(user5);
 //        dao.save(t1);
 //        dao.save(t2);
 //        dao.save(t3);
@@ -65,8 +65,8 @@ public class Application {
 //        dao.save(new DistributoreAutomatico("Distributore 4", true));
 //        dao.save(new DistributoreAutomatico("Distributore 5", false));
 
-//        ParcoMezzi greenPark  = new ParcoMezzi(new ArrayList<>());
-//        dao.save(greenPark);
+        ParcoMezzi greenPark  = new ParcoMezzi(new ArrayList<>());
+        dao.save(greenPark);
 
 //        dao.save(new Periodo(new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), null, new ArrayList<>())));
 //        dao.save(new Periodo(new Mezzo(TipoMezzi.AUTOBUS, true, new ArrayList<>(), null, new ArrayList<>())));
@@ -122,11 +122,11 @@ public class Application {
 //        dao.save(tratta4);
 //        dao.save(tratta5);
 
-
-        DistributoreAutomatico da1 = new DistributoreAutomatico("Punto F", true);
-        Rivenditore r1 = new Rivenditore("Punto H");
-        Rivenditore r2 = new Rivenditore("Punto ciao");
-        DistributoreAutomatico da505043 = new DistributoreAutomatico("Punto F", false);
+//
+//        DistributoreAutomatico da1 = new DistributoreAutomatico("Punto F", true);
+//        Rivenditore r1 = new Rivenditore("Punto H");
+//        Rivenditore r2 = new Rivenditore("Punto ciao");
+//        DistributoreAutomatico da505043 = new DistributoreAutomatico("Punto F", false);
 //        dao.save(da1);
 //        dao.save(r1);
 //        dao.save(r2);
@@ -140,15 +140,20 @@ public class Application {
 //        dao.save(biglietto4);
 //        dao.save(biglietto5);
 
-        Abbonamento abbonamento1 = new Abbonamento(t1, TipiAbbonamento.SETTIMANALE, da1);
-        Abbonamento abbonamento2 = new Abbonamento(t2, TipiAbbonamento.MENSILE, r1);
-        Abbonamento abbonamento3 = new Abbonamento(t3, TipiAbbonamento.ANNUALE, da505043);
-        Abbonamento abbonamento4 = new Abbonamento(t4, TipiAbbonamento.SETTIMANALE, r2);
-        Abbonamento abbonamento5 = new Abbonamento(t5, TipiAbbonamento.MENSILE, da1);
-        dao.save(abbonamento1);
-        dao.save(abbonamento2);
-        dao.save(abbonamento3);
-        dao.save(abbonamento4);
-        dao.save(abbonamento5);
+//        Abbonamento abbonamento1 = new Abbonamento(t1, TipiAbbonamento.SETTIMANALE, da1);
+//        Abbonamento abbonamento2 = new Abbonamento(t2, TipiAbbonamento.MENSILE, r1);
+//        Abbonamento abbonamento3 = new Abbonamento(t3, TipiAbbonamento.ANNUALE, da505043);
+//        Abbonamento abbonamento4 = new Abbonamento(t4, TipiAbbonamento.SETTIMANALE, r2);
+//        Abbonamento abbonamento5 = new Abbonamento(t5, TipiAbbonamento.MENSILE, da1);
+//        dao.save(abbonamento1);
+//        dao.save(abbonamento2);
+//        dao.save(abbonamento3);
+//        dao.save(abbonamento4);
+//        dao.save(abbonamento5);
+
+          Tessera t1Fromdb = dao.getElementById(Tessera.class,1L);
+//          dao.update(t1Fromdb,dao.getElementById(Abbonamento.class, 2L));
+        PuntoEmissione r1Fromdb=dao.getElementById(PuntoEmissione.class,52L);
+        dao.save(new Abbonamento(t1Fromdb,TipiAbbonamento.MENSILE,r1Fromdb));
     }
 }

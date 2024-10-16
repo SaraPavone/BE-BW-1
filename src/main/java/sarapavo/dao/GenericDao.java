@@ -2,7 +2,11 @@ package sarapavo.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
+import sarapavo.entities.Abbonamento;
+import sarapavo.entities.Tessera;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class GenericDao {
@@ -35,5 +39,23 @@ public class GenericDao {
         t.commit();
         System.out.println(obj + " Deleted!");
     }
+
+
+    public void update (Tessera t, Abbonamento abb) throws Exception{
+
+        EntityTransaction transaction = geppetto.getTransaction(); // Siccome non stiamo facendo una semplice lettura ma stiamo modificando le tabelle dobbiamo usare le transactions
+        transaction.begin();
+        Query query = geppetto.createQuery("UPDATE Tessera a SET a.abbonamento = :newName WHERE a.numero_tessera = :oldName"); // UPDATE animals SET name = 'Nuovonome' WHERE name = 'Vecchionome'
+        query.setParameter("newName", abb);
+        query.setParameter("oldName", t.getNumero_tessera());
+
+        int numModificati = query.executeUpdate(); // esegue le query di tipo UPDATE e DELETE
+
+        transaction.commit();
+
+        System.out.println(numModificati + " elementi sono stati modificati con successo");
+    }
+
+
 
 }
