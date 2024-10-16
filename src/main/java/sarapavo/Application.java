@@ -3,16 +3,12 @@ package sarapavo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import sarapavo.dao.DaoAbbonamenti;
+import sarapavo.dao.DaoMezzi;
 import sarapavo.dao.DaoPE;
+import sarapavo.dao.DaoTratte;
 import sarapavo.dao.GenericDao;
-import sarapavo.entities.*;
-import sarapavo.entities.enums.TipiAbbonamento;
-import sarapavo.entities.enums.TipoMezzi;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import sarapavo.entities.Mezzo;
+import sarapavo.entities.Periodo;
 
 public class Application {
 
@@ -24,12 +20,12 @@ public class Application {
         EntityManager em =  emf.createEntityManager();
         GenericDao dao  = new GenericDao(em);
         DaoPE daope = new DaoPE(em);
+        DaoMezzi daomezzi = new DaoMezzi(em);
+        DaoTratte daotratte = new DaoTratte(em);
 //        dao.populate();
-
         daope.getNumeroBigliettoAndAbbonamenti();
-
-
-
+        daomezzi.periodiDiManutenzioneeServizio();
+        daotratte.getTempoMedioTratta("Piazza Roma","Stazione Centrale");
 
     }
 }

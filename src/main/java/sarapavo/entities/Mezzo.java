@@ -8,6 +8,25 @@ import java.util.List;
 
 @Entity
 @Table(name = "mezzi")
+@NamedQuery(
+        name = "Mezzo.countValidatedTickets",
+        query = "SELECT m.mezzo, COUNT(b.id) AS numBigliettiVidimati " +
+                "FROM Mezzo m " +
+                "LEFT JOIN m.biglietti b " +
+                "WHERE b.data_vidimazione IS NOT NULL " +
+                "GROUP BY m.mezzo"
+)
+
+@NamedQuery(
+        name = "Mezzo.maintenancePeriods",
+        query = "SELECT m.mezzo, p.data_inizio, p.data_fine, p.is_maintance " +
+                "FROM Mezzo m " +
+                "JOIN m.lista_periodi p " +
+                "WHERE p.is_maintance = true " +
+                "ORDER BY p.data_inizio"
+)
+
+
 
 public class Mezzo {
 
@@ -117,11 +136,11 @@ public class Mezzo {
     public String toString() {
         return "Mezzo{" +
                 "id=" + id +
-                ", mezzo=" + mezzo +
+                ", mezzo=" + mezzo.name() +
+                ", mezzo=" + mezzo.name() +
                 ", capienza_massima=" + capienza_massima +
                 ", manutenzione=" + manutenzione +
-                ", tratte=" + tratte +
-                ", parcomezzi=" + parcomezzi +
+                ", parcomezzi=" + parcomezzi.getId() +
                 '}';
     }
 }

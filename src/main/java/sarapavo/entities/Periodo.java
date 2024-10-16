@@ -3,6 +3,7 @@ package sarapavo.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "periodo_manutenzione")
@@ -11,8 +12,8 @@ public class Periodo {
     @GeneratedValue
     private long id;
 
-    private LocalDate data_inizio = LocalDate.now();
-    private LocalDate data_fine = null;
+    private LocalDate data_inizio ;
+    private LocalDate data_fine ;
     private boolean is_maintance;
 
     @ManyToOne
@@ -23,12 +24,18 @@ public class Periodo {
 
     public Periodo(Mezzo m){
         this.mezzo = m;
-        if(m.getLista_periodi() != null && !m.getLista_periodi().isEmpty()){
-            setIs_maintance(!m.getLista_periodi().getLast().isIs_maintance());
-            m.getLista_periodi().getLast().setData_fine(this.data_inizio);
+        this.data_inizio = LocalDate.now();
+        if (m.getLista_periodi() == null) {
+            m.setLista_periodi(new ArrayList<>());
+        }
+        if (!m.getLista_periodi().isEmpty()) {
+            Periodo ultimoPeriodo = m.getLista_periodi().get(m.getLista_periodi().size() - 1);
+            setIs_maintance(!ultimoPeriodo.isIs_maintance());
+            ultimoPeriodo.setData_fine(this.data_inizio);
         }else{
             setIs_maintance(true);
         }
+        m.getLista_periodi().add(this);
     }
 
     public long getId() {
