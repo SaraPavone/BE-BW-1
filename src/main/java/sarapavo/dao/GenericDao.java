@@ -41,20 +41,23 @@ public class GenericDao {
     }
 
 
-    public void update (Tessera t, Abbonamento abb) throws Exception{
-
-        EntityTransaction transaction = geppetto.getTransaction(); // Siccome non stiamo facendo una semplice lettura ma stiamo modificando le tabelle dobbiamo usare le transactions
+    public <E,V> void update(E entity, String attributeName, V newValue, String field, Object value) throws Exception{
+        EntityTransaction transaction = geppetto.getTransaction();
         transaction.begin();
-        Query query = geppetto.createQuery("UPDATE Tessera a SET a.abbonamento = :newName WHERE a.numero_tessera = :oldName"); // UPDATE animals SET name = 'Nuovonome' WHERE name = 'Vecchionome'
-        query.setParameter("newName", abb);
-        query.setParameter("oldName", t.getNumero_tessera());
 
-        int numModificati = query.executeUpdate(); // esegue le query di tipo UPDATE e DELETE
+        String entityName = entity.getClass().getSimpleName();
+        String queryString = "UPDATE" + entity + "e SET e." + attributeName + " = :newValue WHERE e." + field + " = :value";
+        Query query = geppetto.createQuery((queryString));
 
+        query.setParameter("newValue", newValue);
+        query.setParameter("value",value);
+
+        int numModificati = query.executeUpdate();
         transaction.commit();
 
         System.out.println(numModificati + " elementi sono stati modificati con successo");
     }
+
 
 
 

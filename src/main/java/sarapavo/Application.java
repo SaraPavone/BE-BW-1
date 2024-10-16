@@ -151,7 +151,7 @@ public class Application {
 //        dao.save(abbonamento4);
 //        dao.save(abbonamento5);
 
-          Tessera t1Fromdb = dao.getElementById(Tessera.class,1L);
+        Tessera t1Fromdb = dao.getElementById(Tessera.class,1L);
 //          dao.update(t1Fromdb,dao.getElementById(Abbonamento.class, 2L));
         PuntoEmissione r1Fromdb=dao.getElementById(PuntoEmissione.class,52L);
         dao.save(new Abbonamento(t1Fromdb,TipiAbbonamento.MENSILE,r1Fromdb));
