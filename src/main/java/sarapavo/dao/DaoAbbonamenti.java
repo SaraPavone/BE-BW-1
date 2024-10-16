@@ -3,6 +3,7 @@ package sarapavo.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import sarapavo.entities.Abbonamento;
+import sarapavo.entities.PuntoEmissione;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -17,17 +18,18 @@ public class DaoAbbonamenti {
         this.em = em;
     }
 
-    public Map<Abbonamento,Integer> conteggioAbbonamentiPE(){
-        TypedQuery<Object[]> query =
-                em.createNamedQuery("countAbbonamentiP", Object[].class);
+    public void conteggioAbbonamentiPE(){
+        TypedQuery<Object[]> query = em.createNamedQuery("countAbbonamentiP", Object[].class);
         List<Object[]> risultati = query.getResultList();
-        Map<Abbonamento, Integer> abbonamentiCount = new HashMap<>();
-        for(Object[] result:risultati){
-            Abbonamento abbonamento = (Abbonamento)result[0];
-            Long count = (Long)result[1];
-            abbonamentiCount.put(abbonamento, count.intValue());
+
+        // Processa e stampa i risultati
+        for (Object[] risultato : risultati) {
+            PuntoEmissione puntoEmissione = (PuntoEmissione) risultato[0];
+            Long count = (Long) risultato[1];
+
+            System.out.println("Punto di emissione: " + puntoEmissione.getNome_punto_emissione());
+            System.out.println("Numero di abbonamenti emessi: " + count);
         }
-        return abbonamentiCount;
     }
 
 
