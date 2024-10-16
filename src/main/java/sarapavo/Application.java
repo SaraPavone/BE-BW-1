@@ -23,7 +23,7 @@ public class Application {
         DaoMezzi daomezzi = new DaoMezzi(em);
         DaoTratte daotratte = new DaoTratte(em);
 //        dao.populate();
-        daope.getNumeroBigliettoAndAbbonamenti();
+        daope.getNumeroAbbonamenti();
         daomezzi.periodiDiManutenzioneeServizio();
         daotratte.getTempoMedioTratta("Piazza Roma","Stazione Centrale");
 

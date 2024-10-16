@@ -12,7 +12,7 @@ public class DaoPE {
         this.em = em;
     }
 
-    public void getNumeroBigliettoAndAbbonamenti(){
+    public void getNumeroAbbonamenti(){
         TypedQuery<Object[]> query = em.createNamedQuery("PuntoEmissione.countTicketsAndSubscriptions", Object[].class);
         for (Object[] risultato : query.getResultList()) {
             String nomePuntoEmissione = (String) risultato[0];
