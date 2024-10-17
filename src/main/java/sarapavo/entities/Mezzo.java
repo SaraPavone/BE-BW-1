@@ -10,7 +10,8 @@ import java.util.List;
 @Table(name = "mezzi")
 @NamedQuery(
         name = "Mezzo.countValidatedTickets",
-        query = "FROM Mezzo m " +
+        query = "SELECT m.mezzo, COUNT(b.id) AS numBigliettiVidimati " +
+                "FROM Mezzo m " +
                 "LEFT JOIN m.biglietti b " +
                 "WHERE b.data_vidimazione IS NOT NULL " +
                 "GROUP BY m.mezzo"
