@@ -285,12 +285,3 @@ public class Application {
 
 }
 
-
-//Scanner in  = new Scanner(System.in);
-//String opzioni = "Aggiungi utente,Compra droga,Vendi droga";
-//        switch(Autogestionale.menuSelezione(in,opzioni)){
-//        case 1:
-//        System.out.println("vaffanculo");break;
-//default:
-//        System.out.println("fuck");
-//       }
