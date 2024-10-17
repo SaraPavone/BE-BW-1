@@ -2,6 +2,7 @@ package sarapavo.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import sarapavo.entities.Mezzo;
 import sarapavo.entities.enums.TipoMezzi;
 
 import java.time.LocalDate;
@@ -56,6 +57,29 @@ public class DaoMezzi {
             }
         } catch (Exception e) {
             System.err.println("Errore durante il recupero dei periodi di manutenzione: " + e.getMessage());
+        }
+    }
+
+    public void conteggioBigliettiVidimatiPerLassoDiTempo(LocalDate startDate, LocalDate endDate) {
+        try {
+            TypedQuery<Object[]> query = em.createNamedQuery("Mezzo.countValidatedTicketsInTimeRange", Object[].class);
+            query.setParameter("startDate", startDate);
+            query.setParameter("endDate", endDate);
+            List<Object[]> risultati = query.getResultList();
+
+            if (risultati.isEmpty()) {
+                System.out.println("Nessun biglietto vidimato trovato nel lasso di tempo specificato.");
+                return;
+            }
+
+            for (Object[] risultato : risultati) {
+                Mezzo mezzo = (Mezzo) risultato[0];
+                Long count = (Long) risultato[1];
+
+                System.out.println("Mezzo: " + mezzo.getId() + ", Numero di biglietti vidimati: " + count);
+            }
+        } catch (Exception e) {
+            System.err.println("Errore durante il recupero dei biglietti vidimati: " + e.getMessage());
         }
     }
 }

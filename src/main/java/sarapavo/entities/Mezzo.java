@@ -25,6 +25,9 @@ import java.util.List;
                 "WHERE p.is_maintance = true " +
                 "ORDER BY p.data_inizio"
 )
+
+@NamedQuery(name = "Mezzo.countValidatedTicketsInTimeRange",
+        query = "SELECT m, COUNT(t) FROM Mezzo m JOIN m.validatedTickets t WHERE t.date BETWEEN :startDate AND :endDate GROUP BY m")
 public class Mezzo {
 
     @Id
