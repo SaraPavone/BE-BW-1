@@ -55,4 +55,18 @@ public class Biglietto {
     public void setMezzo(Mezzo mezzo) {
         this.mezzo = mezzo;
     }
+
+    public long getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Biglietto{" +
+                "id=" + id +
+                ", data_vidimazione=" + data_vidimazione +
+                ", punto_emisssione=" + punto_emisssione +
+                ", mezzo=" + mezzo +
+                '}';
+    }
 }
