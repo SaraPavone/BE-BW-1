@@ -12,30 +12,29 @@ public class Periodo {
     @GeneratedValue
     private long id;
 
-    private LocalDate data_inizio ;
-    private LocalDate data_fine ;
+    private LocalDate data_inizio;
+    private LocalDate data_fine;
     private boolean is_maintance;
 
     @ManyToOne
     @JoinColumn(name = "mezzo_id")
     private Mezzo mezzo;
 
-    public Periodo() {}
+    public Periodo() {
+    }
 
-    public Periodo(Mezzo m){
+    public Periodo(Mezzo m, boolean is_maintance) {
         this.mezzo = m;
         this.data_inizio = LocalDate.now();
         if (m.getLista_periodi() == null) {
             m.setLista_periodi(new ArrayList<>());
-        }
-        if (!m.getLista_periodi().isEmpty()) {
-            Periodo ultimoPeriodo = m.getLista_periodi().get(m.getLista_periodi().size() - 1);
-            setIs_maintance(!ultimoPeriodo.isIs_maintance());
-            ultimoPeriodo.setData_fine(this.data_inizio);
-        }else{
-            setIs_maintance(true);
+            if (!m.getLista_periodi().isEmpty()) {
+                Periodo ultimoPeriodo = m.getLista_periodi().get(m.getLista_periodi().size() - 1);
+                ultimoPeriodo.setData_fine(this.data_inizio);
+            }
         }
         m.getLista_periodi().add(this);
+        this.is_maintance = is_maintance;
     }
 
     public long getId() {

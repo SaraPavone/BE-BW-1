@@ -3,9 +3,7 @@ package sarapavo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import sarapavo.dao.DaoAbbonamenti;
-import sarapavo.dao.DaoPE;
-import sarapavo.dao.GenericDao;
+import sarapavo.dao.*;
 import sarapavo.entities.*;
 import sarapavo.entities.enums.TipiAbbonamento;
 import sarapavo.utils.Autogestionale;
@@ -23,6 +21,9 @@ public class Application {
         GenericDao dao = new GenericDao(em);
         DaoPE daope = new DaoPE(em);
         DaoAbbonamenti abbonamentidao = new DaoAbbonamenti(em);
+        DaoMezzi mezziDao = new DaoMezzi(em);
+        DaoTratte tratteDao = new DaoTratte(em);
+
 
         System.out.println("Benvenuti in MyTransport!");
         System.out.println("Inserisci il tuo ID:");
@@ -32,29 +33,44 @@ public class Application {
         if (userFound.getAdmin()) {
             switch (Autogestionale.menuSelezione(scanner, "Gestione mezzi,Statistiche")) {
                 case 1:
-                    System.out.println("Lista mezzi ____ DA COMPLETARE");
+                    for (Mezzo m : dao.findAll(Mezzo.class)) {
+                        System.out.println(m.toString());
+                    }
 
                     System.out.println("Inserisci l'ID del mezzo per gestire: ");
                     long idMezzo = Long.parseLong(scanner.nextLine());
                     Mezzo mezzoFound = dao.getElementById(Mezzo.class, idMezzo);
 
-                    System.out.println("Dettagli Mezzo selezionato ____ DA COMPLETARE");
+                    System.out.println(mezzoFound.toString());
 
                     boolean ciccio = mezzoFound.isManutenzione();
-                    System.out.println(ciccio ? ("Vuoi rimuovere il mezzo dalla manutenzione? s/n?") :
-                            ("Vuoi mettere il mezzo in manutenzione? s/n?"));
-
-                    char sn = scanner.nextLine().charAt(0);
-                    if ((sn == 's')) {
-                        mezzoFound.setManutenzione(!mezzoFound.isManutenzione());
-                        System.out.println("Stato del mezzo aggiornato!");
-                    } else {
-                        mezzoFound.setManutenzione(mezzoFound.isManutenzione());
-                        System.out.println("Stato del mezzo non aggiornato!");
+                    String ris = (ciccio ? ("Vuoi rimuovere il mezzo dalla manutenzione?\nsi,no ") :
+                            ("Vuoi mettere il mezzo in manutenzione?\nsi,no "));
+                    switch (Autogestionale.menuSelezione(scanner, ris)) {
+                        case 1:
+                            mezzoFound.setManutenzione(!mezzoFound.isManutenzione());
+                            dao.update(mezzoFound, "manutenzione", !mezzoFound.isManutenzione(), "id", mezzoFound.getId());
+                            Periodo p = new Periodo(mezzoFound, mezzoFound.isManutenzione());
+                            dao.save(p);
+                            System.out.println("Stato del mezzo aggiornato!");
+                            break;
+                        case 2:
+                            System.out.println("Stato del mezzo non aggiornato!");
                     }
-                    break;
                 case 2:
-                    System.out.println("Statistiche generali ____ DA COMPLETARE");
+                    System.out.println("Numero di abbonamenti emessi per punto di emissione: ");
+                    daope.getNumeroAbbonamenti();
+                    System.out.println("Numero di biglietti emessi per punto di emissione: ");
+                    daope.conteggioBigliettiEmessiPerPE();
+                    System.out.println("Numero di biglietti vidimati per mezzo: ");
+                    mezziDao.conteggioBigliettiVidimatiPerMezzo();
+                    System.out.println("Periodi di manutenzione o servizio dei mezzi: ");
+                    mezziDao.periodiDiManutenzioneeServizio();
+                    System.out.println("Tutte le tratte: ");
+                    for (Tratta m : dao.findAll(Tratta.class)) {
+                        System.out.println(m.toString());
+                    }
+
                     System.out.println("Statistiche per lasso di tempo: ");
                     switch (Autogestionale.menuSelezione(scanner, "Numero biglietti vidimati,Numero biglietti e abbonamenti emessi ")) {
                         case 1:
@@ -65,7 +81,7 @@ public class Application {
                             System.out.println("Inserisci la data di fine ( AAAA-MM-GG  ");
                             String dataFine = scanner.nextLine();
                             LocalDate dataFineF = LocalDate.parse(dataFine);
-                            System.out.println(dataInizioF + " " + dataFineF);
+                            mezziDao.conteggioBigliettiVidimatiPerLassoDiTempo(dataInizioF, dataFineF);
                             break;
                         case 2:
                             System.out.println("Inserisci il periodo da verificare: ");
@@ -75,7 +91,7 @@ public class Application {
                             System.out.println("Inserisci la data di fine ( AAAA-MM-GG  ");
                             String dataFine2 = scanner.nextLine();
                             LocalDate dataFineF2 = LocalDate.parse(dataFine2);
-                            System.out.println(dataInizioF2 + " " + dataFineF2);
+                            daope.conteggioBigliettiEAbbonamentiPerLassoDiTempo(dataInizioF2, dataFineF2);
                             break;
                     }
             }
@@ -97,9 +113,11 @@ public class Application {
                         case 2:
                             System.out.println("Inserisci l'ID del punto vendita dal quale stai acquistando il biglietto: ");
                             long idPE = Long.parseLong(scanner.nextLine());
-                            PuntoEmissione puntoEmissioneF = dao.getElementById(PuntoEmissione.class, idPE);
+                            PuntoEmissione puntoEmissioneF = dao.getElementById(PuntoEmissione.class, idPE); // VERIFICARE SE FUNZIONA
                             System.out.println("Inserisci l'ID del mezzo su cui vuoi salire: ");
-                            System.out.println("Elenco tratte + id mezzo ____ DA COMPLETARE");
+                            for (Tratta t : dao.findAll(Tratta.class)) {
+                                System.out.println(t.toString());
+                            }
                             long idMezzo = Long.parseLong(scanner.nextLine());
                             Mezzo mezzoF = dao.getElementById(Mezzo.class, idMezzo);
                             Biglietto bigliettoAcquistato = new Biglietto(puntoEmissioneF, mezzoF);
@@ -126,27 +144,30 @@ public class Application {
                         //acquistare biglietto
                         case 1:
                             System.out.println("Inserisci l'ID del mezzo su cui vuoi salire: ");
-                            System.out.println("Elenco tratte + id mezzo ____ DA COMPLETARE");
+                            for (Tratta t : dao.findAll(Tratta.class)) {
+                                System.out.println(t.toString());
+                            }
                             long idMezzo = Long.parseLong(scanner.nextLine());
                             Mezzo mezzoF = dao.getElementById(Mezzo.class, idMezzo);
                             Biglietto bigliettoAcquistato = new Biglietto(puntoEmissioneF, mezzoF);
                             dao.save(bigliettoAcquistato);
                             System.out.println("Biglietto acquistato con successo! ");
-                            System.out.println("Vuoi vidimare il biglietto?\ns/n ");
-                            char sn = scanner.nextLine().charAt(0);
-                            if (sn == 's') {
-                                System.out.println("Inserisci il numero del biglietto: ");
-                                long numBigliett = Long.parseLong(scanner.nextLine());
-                                Biglietto bigliettoF = dao.getElementById(Biglietto.class, numBigliett);
-                                bigliettoF.setData_vidimazione(LocalDate.now());
-                                dao.update(Biglietto.class, "data_vidimazione", bigliettoF, "id", dao.getElementById(Biglietto.class, numBigliett).getId());
-                                System.out.println("Biglietto vidimato con successo! ");
-                            } else {
-                                System.out.println("Esci");
+
+                            switch (Autogestionale.menuSelezione(scanner, "Vuoi vidimare il biglietto?\nsi,no ")) {
+                                case 1:
+                                    System.out.println("Inserisci il numero del biglietto: ");
+                                    long numBigliett = Long.parseLong(scanner.nextLine());
+                                    Biglietto bigliettoF = dao.getElementById(Biglietto.class, numBigliett);
+                                    bigliettoF.setData_vidimazione(LocalDate.now());
+                                    dao.update(Biglietto.class, "data_vidimazione", bigliettoF, "id", dao.getElementById(Biglietto.class, numBigliett).getId());
+                                    System.out.println("Biglietto vidimato con successo! ");
+                                    break;
+                                case 2:
+                                    break;
                             }
                             break;
                         //acquistare abbonamento
-                        case 2:
+                        case 2: //------------------------------------------------------------------------------------------------------------------------------------
                             if (userFound.getTessera() != null) {
                                 System.out.println(userFound.getTessera());
                                 // tessera scaduta

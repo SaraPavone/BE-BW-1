@@ -28,7 +28,7 @@ public class DaoTratte {
             } else {
                 System.out.println("Non ci sono dati per questa tratta");
             }
-        } catch (IllegalArgumentException e) {
+        } catch (NullPointerException e) {
             System.out.println("Nessun risultato trovato per la tratta " + zonaPartenza + " - " + capolinea);
         } catch (Exception e) {
             System.err.println("Errore durante il recupero del tempo medio: " + e.getMessage());

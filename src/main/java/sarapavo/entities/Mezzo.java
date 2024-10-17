@@ -63,7 +63,7 @@ public class Mezzo {
 
     public Mezzo(TipoMezzi mezzo, boolean manutenzione, List<Tratta> tratte, ParcoMezzi parcomezzi, List<Biglietto> biglietti) {
         this.mezzo = mezzo;
-        this.capienza_massima = mezzo.equals(TipoMezzi.TRAM)? 40 : mezzo.equals(TipoMezzi.AUTOBUS)? 60 : 0;
+        this.capienza_massima = mezzo.equals(TipoMezzi.TRAM) ? 40 : mezzo.equals(TipoMezzi.AUTOBUS) ? 60 : 0;
         this.manutenzione = manutenzione;
         this.tratte = tratte;
         this.parcomezzi = parcomezzi;
@@ -131,7 +131,7 @@ public class Mezzo {
         this.lista_periodi = lista_periodi;
     }
 
-    public void addPeriodo(Periodo p){
+    public void addPeriodo(Periodo p) {
         this.lista_periodi.add(p);
     }
 
@@ -142,8 +142,6 @@ public class Mezzo {
                 ", mezzo=" + mezzo +
                 ", capienza_massima=" + capienza_massima +
                 ", manutenzione=" + manutenzione +
-                ", tratte=" + tratte +
-                ", parcomezzi=" + parcomezzi +
                 '}';
     }
 }
