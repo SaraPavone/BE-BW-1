@@ -11,10 +11,10 @@ import java.util.List;
 @DiscriminatorColumn(name = "tipo_punto_emissione")
 
 @NamedQuery(name = "PuntoEmissione.countIssuedTickets",
-        query = "SELECT p, COUNT(t) FROM PuntoEmissione p LEFT JOIN p.tickets t GROUP BY p")
+        query = "SELECT p, COUNT(b) FROM PuntoEmissione p LEFT JOIN p.biglietti b GROUP BY p")
 
 @NamedQuery(name = "countTicketsAndSubscriptionsInTimeRange",
-        query = "SELECT p, COUNT(t), COUNT(a) FROM PuntoEmissione p LEFT JOIN p.tickets t LEFT JOIN p.subscriptions a WHERE t.date BETWEEN :startDate AND :endDate GROUP BY p")
+        query = "SELECT p, COUNT(b), COUNT(a) FROM PuntoEmissione p LEFT JOIN p.biglietti b LEFT JOIN p.abbonamenti a WHERE b.data BETWEEN :startDate AND :endDate GROUP BY p")
 
 public abstract class PuntoEmissione {
 
