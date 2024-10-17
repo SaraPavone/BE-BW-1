@@ -5,6 +5,12 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tratte")
+@NamedQuery(
+        name = "Tratta.averageTravelTimeForSpecificRoute",
+        query = "SELECT AVG(t.tempo_percorrenza_previsto) AS avgTempoPrevisto " +
+                "FROM Tratta t " +
+                "WHERE t.zona_partenza = :zonaPartenza AND t.capolinea = :capolinea"
+)
 
 public class Tratta {
     @Id
