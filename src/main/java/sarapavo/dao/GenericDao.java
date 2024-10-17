@@ -50,7 +50,7 @@ public class GenericDao {
 
         String entityName = entity.getClass().getSimpleName();
         String queryString = "UPDATE" + entity + "e SET e." + attributeName + " = :newValue WHERE e." + field + " = :value";
-        Query query = geppetto.createQuery((queryString));
+        Query query = geppetto.createQuery(queryString);
 
         query.setParameter("newValue", newValue);
         query.setParameter("value",value);
