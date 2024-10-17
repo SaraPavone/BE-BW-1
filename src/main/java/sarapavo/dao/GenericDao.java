@@ -110,8 +110,8 @@ public class GenericDao {
         save(mezzo1);
         save(mezzo2);
 
-        Biglietto biglietto1 = new Biglietto(LocalDate.now(), rivenditore, mezzo1);
-        Biglietto biglietto2 = new Biglietto(LocalDate.now(), distributore, mezzo2);
+        Biglietto biglietto1 = new Biglietto(rivenditore, mezzo1);
+        Biglietto biglietto2 = new Biglietto(distributore, mezzo2);
         save(biglietto1);
         save(biglietto2);
     }
