@@ -7,7 +7,8 @@ import java.time.LocalDate;
 
 @NamedQuery(
         name = "countAbbonamentiP",
-        query = "Select a.punto_emissione, count(a.id) from Abbonamento a group by a.punto_emissione"
+        query = "Select a.punto_emissione, count(a.id) " +
+                "from Abbonamento a group by a.punto_emissione"
 )
 @Entity
 @Table(name = "abbonamenti")
