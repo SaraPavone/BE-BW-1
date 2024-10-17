@@ -3,6 +3,7 @@ package sarapavo.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import sarapavo.entities.*;
 import sarapavo.entities.enums.TipiAbbonamento;
 import sarapavo.entities.enums.TipoMezzi;
@@ -67,62 +68,19 @@ public class GenericDao {
         }
     }
 
-    public void populate() {
-        User user1 = new User("Mario", "Rossi", LocalDate.of(1985, 5, 15), false);
-        User user2 = new User("Luca", "Bianchi", LocalDate.of(1990, 3, 25), false);
-        save(user1);
-        save(user2);
-
-        Tessera tessera1 = new Tessera(user1);
-        Tessera tessera2 = new Tessera(user2);
-        save(tessera1);
-        save(tessera2);
-
-
-        PuntoEmissione rivenditore = new Rivenditore("Rivenditore Centrale");
-        DistributoreAutomatico distributore = new DistributoreAutomatico("Distributore Automatico 1", false);
-        save(rivenditore);
-        save(distributore);
-
-        Abbonamento abbonamento1 = new Abbonamento(tessera1, TipiAbbonamento.MENSILE, rivenditore);
-        Abbonamento abbonamento2 = new Abbonamento(tessera2, TipiAbbonamento.SETTIMANALE, distributore);
-        save(abbonamento1);
-        save(abbonamento2);
-
-        Mezzo mezzo1 = new Mezzo(TipoMezzi.AUTOBUS, false, new ArrayList<>(), null, new ArrayList<>());
-        Mezzo mezzo2 = new Mezzo(TipoMezzi.TRAM, false, new ArrayList<>(), null, new ArrayList<>());
-        save(mezzo1);
-        save(mezzo2);
-
-        Tratta tratta1 = new Tratta(mezzo1, 30, "Stazione Centrale", "Piazza Roma");
-        Tratta tratta2 = new Tratta(mezzo2, 20, "Capolinea 1", "Capolinea 2");
-        save(tratta1);
-        save(tratta2);
-
-        Periodo periodo1 = new Periodo(mezzo1);
-        Periodo periodo2 = new Periodo(mezzo2);
-        save(periodo1);
-        save(periodo2);
-
-        ParcoMezzi parcoMezzi = new ParcoMezzi();
-        List<Mezzo> mezziList = new ArrayList<>();
-        mezziList.add(mezzo1);
-        mezziList.add(mezzo2);
-        parcoMezzi.setMezzi(mezziList);
-        save(parcoMezzi);
-
-        mezzo1.setParcomezzi(parcoMezzi);
-        mezzo2.setParcomezzi(parcoMezzi);
-        save(mezzo1);
-        save(mezzo2);
-
-        Biglietto biglietto1 = new Biglietto(rivenditore, mezzo1);
-        Biglietto biglietto2 = new Biglietto(distributore, mezzo2);
-        save(biglietto1);
-        save(biglietto2);
+    public <T> List<T> findAll(Class<T> entityClass){
+        List<T> risultati = new ArrayList<>();
+        try{
+            String query = "SELECT e FROM " + entityClass.getSimpleName() + " e";
+            TypedQuery<T> queryAll = em.createQuery(query,entityClass);
+            risultati = queryAll.getResultList();
+            System.out.println("Trovati "+ risultati.size() + "elementi di tipo "+ entityClass.getSimpleName());
+        }catch(Exception e){
+            System.out.println("Errore " + e.getMessage());
+        }
+        return risultati;
     }
-
-
+    
 
 
 }
