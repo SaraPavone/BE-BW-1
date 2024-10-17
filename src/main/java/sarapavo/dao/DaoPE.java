@@ -11,14 +11,24 @@ public class DaoPE {
     public DaoPE(EntityManager em){
         this.em = em;
     }
+    public void getNumeroAbbonamenti() {
+        try {
+            TypedQuery<Object[]> query = em.createNamedQuery("PuntoEmissione.countTicketsAndSubscriptions", Object[].class);
+            List<Object[]> risultati = query.getResultList();
 
-    public void getNumeroAbbonamenti(){
-        TypedQuery<Object[]> query = em.createNamedQuery("PuntoEmissione.countTicketsAndSubscriptions", Object[].class);
-        for (Object[] risultato : query.getResultList()) {
-            String nomePuntoEmissione = (String) risultato[0];
-            Long numeroBiglietti = (Long) risultato[1];
-            System.out.println("Punto Emissione: " + nomePuntoEmissione +
-                    ", Numero Abbonamenti: " + numeroBiglietti);
+            if (risultati.isEmpty()) {
+                System.out.println("Nessun punto di emissione trovato.");
+                return;
+            }
+
+            for (Object[] risultato : risultati) {
+                String nomePuntoEmissione = (String) risultato[0];
+                Long numeroAbbonamenti = (Long) risultato[1];
+                System.out.println("Punto Emissione: " + nomePuntoEmissione +
+                        ", Numero Abbonamenti: " + numeroAbbonamenti);
+            }
+        } catch (Exception e) {
+            System.err.println("Errore durante il recupero dei dati: " + e.getMessage());
         }
     }
 }

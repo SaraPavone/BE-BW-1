@@ -5,6 +5,7 @@ import jakarta.persistence.TypedQuery;
 import sarapavo.entities.enums.TipoMezzi;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class DaoMezzi {
     private final EntityManager em;
@@ -14,26 +15,47 @@ public class DaoMezzi {
     }
 
     public void conteggioBigliettiVidimatiPerMezzo() {
-        TypedQuery<Object[]> query = em.createNamedQuery("Mezzo.countValidatedTickets", Object[].class);
-        for (Object[] risultato : query.getResultList()) {
-            String mezzo = (String) risultato[0];
-            Long numBigliettiVidimati = (Long) risultato[1];
-            System.out.println("Mezzo: " + mezzo + ", Numero Biglietti Vidimati: " + numBigliettiVidimati);
+        try {
+            TypedQuery<Object[]> query = em.createNamedQuery("Mezzo.countValidatedTickets", Object[].class);
+            List<Object[]> risultati = query.getResultList();
+
+            if (risultati.isEmpty()) {
+                System.out.println("Nessun biglietto vidimato trovato.");
+                return;
+            }
+
+            for (Object[] risultato : risultati) {
+                String mezzo = (String) risultato[0];
+                Long numBigliettiVidimati = (Long) risultato[1];
+                System.out.println("Mezzo: " + mezzo + ", Numero Biglietti Vidimati: " + numBigliettiVidimati);
+            }
+        } catch (Exception e) {
+            System.err.println("Errore durante il recupero dei biglietti vidimati: " + e.getMessage());
         }
     }
 
     public void periodiDiManutenzioneeServizio() {
-        TypedQuery<Object[]> query = em.createNamedQuery("Mezzo.maintenancePeriods", Object[].class);
-        for (Object[] risultato : query.getResultList()) {
-            TipoMezzi mezzo = (TipoMezzi) risultato[0];
-            LocalDate dataInizio = (LocalDate) risultato[1];
-            LocalDate dataFine = (LocalDate) risultato[2];
-            Boolean isManutenzione = (Boolean) risultato[3];
-            System.out.println("Mezzo: " + mezzo +
-                    ", Data Inizio: " + dataInizio +
-                    ", Data Fine: " + dataFine +
-                    ", In Manutenzione: " + isManutenzione);
-        }
+        try {
+            TypedQuery<Object[]> query = em.createNamedQuery("Mezzo.maintenancePeriods", Object[].class);
+            List<Object[]> risultati = query.getResultList();
 
+            if (risultati.isEmpty()) {
+                System.out.println("Nessun periodo di manutenzione trovato.");
+                return;
+            }
+
+            for (Object[] risultato : risultati) {
+                TipoMezzi mezzo = (TipoMezzi) risultato[0];
+                LocalDate dataInizio = (LocalDate) risultato[1];
+                LocalDate dataFine = (LocalDate) risultato[2];
+                Boolean isManutenzione = (Boolean) risultato[3];
+                System.out.println("Mezzo: " + mezzo +
+                        ", Data Inizio: " + dataInizio +
+                        ", Data Fine: " + dataFine +
+                        ", In Manutenzione: " + isManutenzione);
+            }
+        } catch (Exception e) {
+            System.err.println("Errore durante il recupero dei periodi di manutenzione: " + e.getMessage());
+        }
     }
 }

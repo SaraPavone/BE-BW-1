@@ -10,17 +10,28 @@ public class DaoTratte {
         this.em = em;
     }
 
-    public void getTempoMedioTratta(String zonaPartenza, String capolinea){
-        TypedQuery<Double> query = em.createNamedQuery("Tratta.averageTravelTimeForSpecificRoute", Double.class);
-        query.setParameter("zonaPartenza", zonaPartenza);
-        query.setParameter("capolinea",capolinea);
+    public void getTempoMedioTratta(String zonaPartenza, String capolinea) {
+        if (zonaPartenza == null || zonaPartenza.isEmpty() || capolinea == null || capolinea.isEmpty()) {
+            System.out.println("Zona di partenza e capolinea devono essere forniti.");
+            return;
+        }
 
-        Double avgTempoPrevisto = query.getSingleResult();
+        try {
+            TypedQuery<Double> query = em.createNamedQuery("Tratta.averageTravelTimeForSpecificRoute", Double.class);
+            query.setParameter("zonaPartenza", zonaPartenza);
+            query.setParameter("capolinea", capolinea);
 
-        if(avgTempoPrevisto != null){
-            System.out.println("Tempo medio previsto per la tratta " + zonaPartenza + " - " + capolinea + ": " + avgTempoPrevisto + " minuti");
-        }else{
-            System.out.println("Non ci sono dati per questa tratta");
+            Double avgTempoPrevisto = query.getSingleResult();
+
+            if (avgTempoPrevisto != null) {
+                System.out.println("Tempo medio previsto per la tratta " + zonaPartenza + " - " + capolinea + ": " + avgTempoPrevisto + " minuti");
+            } else {
+                System.out.println("Non ci sono dati per questa tratta");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Nessun risultato trovato per la tratta " + zonaPartenza + " - " + capolinea);
+        } catch (Exception e) {
+            System.err.println("Errore durante il recupero del tempo medio: " + e.getMessage());
         }
     }
 }

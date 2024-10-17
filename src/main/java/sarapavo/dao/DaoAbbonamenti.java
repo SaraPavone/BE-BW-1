@@ -18,17 +18,25 @@ public class DaoAbbonamenti {
         this.em = em;
     }
 
-    public void conteggioAbbonamentiPE(){
-        TypedQuery<Object[]> query = em.createNamedQuery("countAbbonamentiP", Object[].class);
-        List<Object[]> risultati = query.getResultList();
+    public void conteggioAbbonamentiPE() {
+        try {
+            TypedQuery<Object[]> query = em.createNamedQuery("countAbbonamentiP", Object[].class);
+            List<Object[]> risultati = query.getResultList();
 
-        // Processa e stampa i risultati
-        for (Object[] risultato : risultati) {
-            PuntoEmissione puntoEmissione = (PuntoEmissione) risultato[0];
-            Long count = (Long) risultato[1];
+            if (risultati.isEmpty()) {
+                System.out.println("Nessun abbonamento trovato.");
+                return;
+            }
 
-            System.out.println("Punto di emissione: " + puntoEmissione.getNome_punto_emissione());
-            System.out.println("Numero di abbonamenti emessi: " + count);
+            for (Object[] risultato : risultati) {
+                PuntoEmissione puntoEmissione = (PuntoEmissione) risultato[0];
+                Long count = (Long) risultato[1];
+
+                System.out.println("Punto di emissione: " + puntoEmissione.getNome_punto_emissione());
+                System.out.println("Numero di abbonamenti emessi: " + count);
+            }
+        } catch (Exception e) {
+            System.err.println("Errore durante il recupero degli abbonamenti: " + e.getMessage());
         }
     }
 

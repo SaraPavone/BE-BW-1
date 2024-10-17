@@ -15,50 +15,56 @@ import java.util.UUID;
 
 public class GenericDao {
 
-    private final EntityManager geppetto;
+    private final EntityManager em;
 
     public GenericDao(EntityManager em){
-        this.geppetto = em;
+        this.em = em;
     }
 
-    public <T> void save (T obj){
-        EntityTransaction t = geppetto.getTransaction();
-        t.begin();
-        geppetto.persist(obj);
-        t.commit();
-        System.out.println(obj + "Saved!!");
+    public <T> void save(T obj) {
+        EntityTransaction t = em.getTransaction();
+        try {
+            t.begin();
+            em.persist(obj);
+            t.commit();
+            System.out.println(obj + " Saved!!");
+        } catch (Exception e) {
+            t.rollback();
+            System.out.println("Error saving: " + e.getMessage());
+        }
     }
 
     public <T> T getElementById (Class<T> entityClass, long id) throws Exception{
-        T found = geppetto.find(entityClass, id);
+        T found = em.find(entityClass, id);
         if(found==null) throw new Exception("Not found");
         return found;
     }
 
     public <T> void delete (Class <T> entityClass, long id) throws Exception{
         T obj = this.getElementById(entityClass,id);
-        EntityTransaction t = geppetto.getTransaction();
+        EntityTransaction t = em.getTransaction();
         t.begin();
-        geppetto.remove(obj);
+        em.remove(obj);
         t.commit();
         System.out.println(obj + " Deleted!");
     }
 
-    public <E, V> void update (E entity, String attributeName, V newValue, String field, Object value) throws Exception{
-        EntityTransaction transaction = geppetto.getTransaction();
-        transaction.begin();
-
-        String entityName = entity.getClass().getSimpleName();
-        String queryString = "UPDATE" + entity + "e SET e." + attributeName + " = :newValue WHERE e." + field + " = :value";
-        Query query = geppetto.createQuery(queryString);
-
-        query.setParameter("newValue", newValue);
-        query.setParameter("value",value);
-
-        int numModificati = query.executeUpdate();
-        transaction.commit();
-
-        System.out.println(numModificati + " elementi sono stati modificati con successo");
+    public <E, V> void update(E entity, String attributeName, V newValue, String field, Object value) {
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+            String entityName = entity.getClass().getSimpleName();
+            String queryString = "UPDATE " + entityName + " e SET e." + attributeName + " = :newValue WHERE e." + field + " = :value";
+            Query query = em.createQuery(queryString);
+            query.setParameter("newValue", newValue);
+            query.setParameter("value", value);
+            int numModificati = query.executeUpdate();
+            transaction.commit();
+            System.out.println(numModificati + " elementi sono stati modificati con successo");
+        } catch (Exception e) {
+            transaction.rollback();
+            System.err.println("Error updating: " + e.getMessage());
+        }
     }
 
     public void populate() {
