@@ -7,6 +7,7 @@ import jakarta.persistence.TypedQuery;
 import sarapavo.entities.*;
 import sarapavo.entities.enums.TipiAbbonamento;
 import sarapavo.entities.enums.TipoMezzi;
+import sarapavo.exceptions.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,9 +36,9 @@ public class GenericDao {
         }
     }
 
-    public <T> T getElementById (Class<T> entityClass, long id) throws Exception{
+    public <T> T getElementById (Class<T> entityClass, long id) throws NotFoundException {
         T found = em.find(entityClass, id);
-        if(found==null) throw new Exception("Not found");
+        if(found==null) throw new NotFoundException(id);
         return found;
     }
 
@@ -80,7 +81,5 @@ public class GenericDao {
         }
         return risultati;
     }
-    
-
 
 }
