@@ -136,6 +136,10 @@ public class Application {
                     }
                     //acquistare
                 case 2:
+                    System.out.println("Seleziona punto vendita: ");
+                    for (PuntoEmissione m : dao.findAll(PuntoEmissione.class)) {
+                        System.out.println(m.toString());
+                    }
                     System.out.println("Inserisci l'ID del punto vendita dal quale stai acquistando il biglietto: ");
                     long idPE = Long.parseLong(scanner.nextLine());
                     PuntoEmissione puntoEmissioneF = dao.getElementById(PuntoEmissione.class, idPE);
@@ -151,15 +155,12 @@ public class Application {
                             Mezzo mezzoF = dao.getElementById(Mezzo.class, idMezzo);
                             Biglietto bigliettoAcquistato = new Biglietto(puntoEmissioneF, mezzoF);
                             dao.save(bigliettoAcquistato);
-                            System.out.println("Biglietto acquistato con successo! ");
+                            System.out.println("Biglietto n: " + bigliettoAcquistato.getId() + " acquistato con successo! ");
 
                             switch (Autogestionale.menuSelezione(scanner, "Vuoi vidimare il biglietto?\nsi,no ")) {
                                 case 1:
-                                    System.out.println("Inserisci il numero del biglietto: ");
-                                    long numBigliett = Long.parseLong(scanner.nextLine());
-                                    Biglietto bigliettoF = dao.getElementById(Biglietto.class, numBigliett);
-                                    bigliettoF.setData_vidimazione(LocalDate.now());
-                                    dao.update(Biglietto.class, "data_vidimazione", bigliettoF, "id", dao.getElementById(Biglietto.class, numBigliett).getId());
+                                    bigliettoAcquistato.setData_vidimazione(LocalDate.now());
+                                    dao.update(Biglietto.class, "data_vidimazione", bigliettoAcquistato, "id", bigliettoAcquistato.getId());
                                     System.out.println("Biglietto vidimato con successo! ");
                                     break;
                                 case 2:
@@ -172,137 +173,141 @@ public class Application {
                                 System.out.println(userFound.getTessera());
                                 // tessera scaduta
                                 if (userFound.getTessera().getData_scadenza().isBefore(LocalDate.now())) {
-                                    System.out.println("La tua tessera é scaduta, vuoi rinnovarla?\ns/n ");
-                                    char sno = scanner.nextLine().charAt(0);
-                                    if (sno == 's') {
-                                        Tessera t = new Tessera(userFound);
-                                        dao.save(t);
-                                        System.out.println("Tessera " + t + " rinnovata con successo! ");
-
-                                        System.out.println("Vuoi acquistare un abbonamento?\ns/n ");
-                                        char sino = scanner.nextLine().charAt(0);
-                                        if (sino == 's') {
+                                   switch (Autogestionale.menuSelezione(scanner, "La tua tessera é scaduta, vuoi rinnovarla?\nsi,no ")){
+                                       case 1:
+                                           Tessera t = new Tessera(userFound);
+                                           dao.save(t);
+                                           System.out.println("Tessera " + t + " rinnovata con successo! ");
+                                           switch (Autogestionale.menuSelezione(scanner, "Vuoi acquistare un abbonamento?\nsi,no ")){
+                                               case 1:
+                                                   TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
+                                                       case 2 -> TipiAbbonamento.MENSILE;
+                                                       case 3 -> TipiAbbonamento.ANNUALE;
+                                                       default -> TipiAbbonamento.SETTIMANALE;
+                                                   };
+                                                   Abbonamento newAbb = new Abbonamento(t, tipo, puntoEmissioneF);
+                                                   dao.save(newAbb);
+                                                   dao.update(userFound.getTessera(),"abbonamento",newAbb,"numero_tessera",userFound.getTessera().getNumero_tessera());
+                                                   System.out.println("Abbonamento " + newAbb + " creato con successo!");
+                                                   break;
+                                               case 2:
+                                                   System.out.println("Uscito dal sistema!");
+                                                   break;
+                                           }
+                                       case 2:
+                                           System.out.println("Uscito dal sistema!");
+                                           break;
+                                   }
+                                } // ho la tessera ma l'abbonamento é scaduto
+                                else if (userFound.getTessera().getAbbonamento().getData_scadenza().isBefore(LocalDate.now())) {
+                                    switch (Autogestionale.menuSelezione(scanner, "Il tuo abbonamento é scaduto, vuoi rinnovarlo?\nsi,no")){
+                                        case 1:
                                             TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
                                                 case 2 -> TipiAbbonamento.MENSILE;
                                                 case 3 -> TipiAbbonamento.ANNUALE;
                                                 default -> TipiAbbonamento.SETTIMANALE;
                                             };
-                                            Abbonamento newAbb = new Abbonamento(t, tipo, puntoEmissioneF);
+                                            Abbonamento newAbb = new Abbonamento(userFound.getTessera(), tipo, puntoEmissioneF);
                                             dao.save(newAbb);
+                                            dao.update(userFound.getTessera(),"abbonamento",newAbb,"numero_tessera",userFound.getTessera().getNumero_tessera());
                                             System.out.println("Abbonamento " + newAbb + " creato con successo!");
-                                        } else {
+                                            break;
+                                        case 2 :
                                             System.out.println("Uscito dal sistema!");
-                                        }
-                                    } else {
-                                        System.out.println("Uscito dal sistema!");
-                                    }
-                                } // ho la tessera ma l'abbonamento é scaduto
-                                else if (userFound.getTessera().getAbbonamento().getData_scadenza().isBefore(LocalDate.now())) {
-                                    System.out.println("Il tuo abbonamento é scaduto, vuoi rinnovarlo?\ns/n ");
-                                    char asino = scanner.nextLine().charAt(0);
-                                    if (asino == 's') {
-                                        TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
-                                            case 2 -> TipiAbbonamento.MENSILE;
-                                            case 3 -> TipiAbbonamento.ANNUALE;
-                                            default -> TipiAbbonamento.SETTIMANALE;
-                                        };
-                                        Abbonamento newAbb = new Abbonamento(userFound.getTessera(), tipo, puntoEmissioneF);
-                                        dao.save(newAbb);
-                                        System.out.println("Abbonamento " + newAbb + " creato con successo!");
-                                    } else {
-                                        System.out.println("Uscito dal sistema!");
+                                            break;
                                     }
                                 } // ho la tessera e l'abbonamento é ancora valido
                                 else if (userFound.getTessera().getAbbonamento().getData_scadenza().isAfter(LocalDate.now())) {
                                     System.out.println("Il tuo abbonamento é ancora valido!");
                                 }// ho la tessera ma non ho ancora mai fatto un abbonamento
                                 else if (userFound.getTessera().getAbbonamento() == null) {
-                                    System.out.println("Vuoi acquistare il tuo primo abbonamento?\ns/n");
-                                    char asino = scanner.nextLine().charAt(0);
-                                    if (asino == 's') {
-                                        TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
-                                            case 2 -> TipiAbbonamento.MENSILE;
-                                            case 3 -> TipiAbbonamento.ANNUALE;
-                                            default -> TipiAbbonamento.SETTIMANALE;
-                                        };
-                                        Abbonamento newAbb = new Abbonamento(userFound.getTessera(), tipo, puntoEmissioneF);
-                                        dao.save(newAbb);
-                                        System.out.println("Abbonamento " + newAbb + " creato con successo!");
-                                    } else {
-                                        System.out.println("Uscito dal sistema!");
+                                    switch (Autogestionale.menuSelezione(scanner,"Vuoi acquistare il tuo primo abbonamento?\nsi,no")){
+                                        case 1:
+                                            TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
+                                                case 2 -> TipiAbbonamento.MENSILE;
+                                                case 3 -> TipiAbbonamento.ANNUALE;
+                                                default -> TipiAbbonamento.SETTIMANALE;
+                                            };
+                                            Abbonamento newAbb = new Abbonamento(userFound.getTessera(), tipo, puntoEmissioneF);
+                                            dao.save(newAbb);
+                                            dao.update(userFound.getTessera(),"abbonamento",newAbb,"numero_tessera",userFound.getTessera().getNumero_tessera());
+                                            System.out.println("Abbonamento " + newAbb + " creato con successo!");
+                                            break;
+                                        case 2:
+                                            System.out.println("Uscito dal sistema!");
+                                            break;
                                     }
                                 }
                             } else // non ho la tessera
                             {
-                                System.out.println("Vuoi creare una tessera?\ns/n ");
-                                char asino = scanner.nextLine().charAt(0);
-                                if (asino == 's') {
-                                    Tessera t = new Tessera(userFound);
-                                    dao.save(t);
-                                    System.out.println("Tessera " + t + " creata con successo! ");
-
-                                    System.out.println("Vuoi acquistare un abbonamento?\ns/n ");
-                                    char sino = scanner.nextLine().charAt(0);
-                                    if (sino == 's') {
-                                        TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
-                                            case 2 -> TipiAbbonamento.MENSILE;
-                                            case 3 -> TipiAbbonamento.ANNUALE;
-                                            default -> TipiAbbonamento.SETTIMANALE;
-                                        };
-                                        Abbonamento newAbb = new Abbonamento(t, tipo, puntoEmissioneF);
-                                        dao.save(newAbb);
-                                        System.out.println("Abbonamento " + newAbb + " creato con successo!");
-                                    } else {
+                                System.out.println();
+                                switch (Autogestionale.menuSelezione(scanner,"Vuoi creare una tessera?\nsi,no ")){
+                                    case 1:
+                                        Tessera t = new Tessera(userFound);
+                                        dao.save(t);
+                                        System.out.println("Tessera " + t + " creata con successo! ");
+                                       switch (Autogestionale.menuSelezione(scanner,"Vuoi acquistare un abbonamento?\nsi,no ")){
+                                           case 1:
+                                               TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
+                                                   case 2 -> TipiAbbonamento.MENSILE;
+                                                   case 3 -> TipiAbbonamento.ANNUALE;
+                                                   default -> TipiAbbonamento.SETTIMANALE;
+                                               };
+                                               Abbonamento newAbb = new Abbonamento(t, tipo, puntoEmissioneF);
+                                               dao.save(newAbb);
+                                               dao.update(userFound.getTessera(),"abbonamento",newAbb,"numero_tessera",userFound.getTessera().getNumero_tessera());
+                                               System.out.println("Abbonamento " + newAbb + " creato con successo!");
+                                               break;
+                                           case 2:
+                                               System.out.println("Uscito dal sistema!");
+                                               break;
+                                       }
+                                            break;
+                                    case 2:
                                         System.out.println("Uscito dal sistema!");
-                                    }
-                                } else {
-                                    System.out.println("Uscito dal sistema!");
+                                        break;
                                 }
-
                             }
                             break;
                         //verifica abbonamento
                         case 3:
                             if (userFound.getTessera() == null) {
-                                System.out.println("Non hai la tessera, vuoi crearla?\ns/n ");
-                                char sino = scanner.nextLine().charAt(0);
-                                if (sino == 's') {
-                                    Tessera t = new Tessera(userFound);
-                                    dao.save(t);
-                                    System.out.println("Tessera " + t + " creata con successo! ");
-                                } else {
-                                    System.out.println("Uscito dal sistema!");
+                                switch (Autogestionale.menuSelezione(scanner,"Non hai la tessera, vuoi crearla?\nsi,no ")){
+                                    case 1:
+                                        Tessera t = new Tessera(userFound);
+                                        dao.save(t);
+                                        System.out.println("Tessera " + t + " creata con successo! ");
+                                        break;
+                                    case 2:
+                                        System.out.println("Uscito dal sistema!");
+                                        break;
                                 }
                             } else if (userFound.getTessera().getAbbonamento() != null) {
                                 if (userFound.getTessera().getAbbonamento().getData_scadenza().isBefore(LocalDate.now())) {
-                                    System.out.println("Il tuo abbonamento é scaduto, vuoi rinnovarlo?\ns/n ");
-                                    char asino = scanner.nextLine().charAt(0);
-                                    if (asino == 's') {
-                                        TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
-                                            case 2 -> TipiAbbonamento.MENSILE;
-                                            case 3 -> TipiAbbonamento.ANNUALE;
-                                            default -> TipiAbbonamento.SETTIMANALE;
-                                        };
-                                        Abbonamento newAbb = new Abbonamento(userFound.getTessera(), tipo, puntoEmissioneF);
-                                        dao.save(newAbb);
-                                        System.out.println("Abbonamento " + newAbb + " creato con successo!");
-                                    } else {
-                                        System.out.println("Uscito dal sistema!");
+                                    switch (Autogestionale.menuSelezione(scanner, "Il tuo abbonamento é scaduto, vuoi rinnovarlo?\nsi,no ")){
+                                        case 1:
+                                            TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
+                                                case 2 -> TipiAbbonamento.MENSILE;
+                                                case 3 -> TipiAbbonamento.ANNUALE;
+                                                default -> TipiAbbonamento.SETTIMANALE;
+                                            };
+                                            Abbonamento newAbb = new Abbonamento(userFound.getTessera(), tipo, puntoEmissioneF);
+                                            dao.save(newAbb);
+                                            dao.update(userFound.getTessera(),"abbonamento",newAbb,"numero_tessera",userFound.getTessera().getNumero_tessera());
+                                            System.out.println("Abbonamento " + newAbb + " creato con successo!");
+                                            break;
+                                        case 2:
+                                            System.out.println("Uscito dal sistema!");
+                                            break;
                                     }
-
                                 } else {
                                     System.out.println(userFound.getTessera().getAbbonamento());
                                 }
-
                             }
                             break;
-
                     }
             }
         }
-
     }
-
-
 }
 
