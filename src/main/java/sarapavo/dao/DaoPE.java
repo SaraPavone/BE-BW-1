@@ -15,7 +15,7 @@ public class DaoPE {
     }
     public void getNumeroAbbonamenti() {
         try {
-            TypedQuery<Object[]> query = em.createNamedQuery("PuntoEmissione.countTicketsAndSubscriptions", Object[].class);
+            TypedQuery<Object[]> query = em.createNamedQuery("PuntoEmissione.countSubscriptions", Object[].class);
             List<Object[]> risultati = query.getResultList();
 
             if (risultati.isEmpty()) {
