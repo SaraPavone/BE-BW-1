@@ -24,6 +24,7 @@ public class Application {
         DaoMezzi mezziDao = new DaoMezzi(em);
         DaoTratte tratteDao = new DaoTratte(em);
 
+
         System.out.println("Benvenuti in MyTransport!");
 
         long id;
@@ -60,9 +61,8 @@ public class Application {
 
                         System.out.println(mezzoFound.toString());
                         boolean ciccio = mezzoFound.isManutenzione();
-                        String ris = (ciccio ? ("Vuoi rimuovere il mezzo dalla manutenzione?\nsi,no ") :
-                                ("Vuoi mettere il mezzo in manutenzione?\nsi,no "));
-                        switch (Autogestionale.menuSelezione(scanner, ris)) {
+                        System.out.println("Vuoi cambiare lo stato del mezzo?");
+                        switch (Autogestionale.menuSelezione(scanner, "si,no")) {
                             case 1:
                                 mezzoFound.setManutenzione(!mezzoFound.isManutenzione());
                                 dao.update(mezzoFound, "manutenzione", !mezzoFound.isManutenzione(), "id", mezzoFound.getId());
@@ -75,8 +75,8 @@ public class Application {
                         }
                         break;
                     case 2:
-                        System.out.println("Numero di abbonamenti emessi per punto di emissione: ");
-                        daope.getNumeroAbbonamenti();
+                        //  System.out.println("Numero di abbonamenti emessi per punto di emissione: ");
+                        // daope.getNumeroAbbonamenti();
                         System.out.println("Numero di biglietti emessi per punto di emissione: ");
                         daope.conteggioBigliettiEmessiPerPE();
                         System.out.println("Numero di biglietti vidimati per mezzo: ");
@@ -129,8 +129,8 @@ public class Application {
                     case 1:
                         int sceltaBiglietto;
                         do {
-                            System.out.println("Hai il biglietto?\nsi,no ");
-                            sceltaBiglietto = Autogestionale.menuSelezione(scanner, "Hai il biglietto?\nsi,no ");
+                            System.out.println("Hai il biglietto? ");
+                            sceltaBiglietto = Autogestionale.menuSelezione(scanner, "si,no ");
                             switch (sceltaBiglietto) {
                                 case 1:
                                     long numBiglietto;
@@ -173,8 +173,8 @@ public class Application {
                                     System.out.println("Biglietto n: " + bigliettoAcquistato.getId() + " acquistato con successo! ");
                                     int sceltaVidimazione;
                                     do {
-                                        System.out.println("Vuoi vidimare il biglietto?\nsi,no ");
-                                        sceltaVidimazione = Autogestionale.menuSelezione(scanner, "Vuoi vidimare il biglietto?\nsi,no ");
+                                        System.out.println("Vuoi vidimare il biglietto? ");
+                                        sceltaVidimazione = Autogestionale.menuSelezione(scanner, "si,no ");
                                         switch (sceltaVidimazione) {
                                             case 1:
                                                 bigliettoAcquistato.setData_vidimazione(LocalDate.now());
@@ -208,20 +208,22 @@ public class Application {
                             if (userFound.getTessera().getData_scadenza().isBefore(LocalDate.now())) {
                                 int sceltaRinnovo;
                                 do {
-                                    System.out.println("La tua tessera é scaduta, vuoi rinnovarla?\nsi,no ");
-                                    sceltaRinnovo = Autogestionale.menuSelezione(scanner, "La tua tessera é scaduta, vuoi rinnovarla?\nsi,no ");
+                                    System.out.println("La tua tessera é scaduta vuoi rinnovarla?");
+                                    sceltaRinnovo = Autogestionale.menuSelezione(scanner, "si,no ");
                                     switch (sceltaRinnovo) {
                                         case 1:
                                             Tessera t = new Tessera(userFound);
-                                            dao.save(t);
+                                            dao.update(userFound.getTessera(), "data_emissione", LocalDate.now(), "id", userFound.getTessera().getNumero_tessera());
+                                            dao.update(userFound.getTessera(), "data_scadenza", LocalDate.now().plusYears(1), "id", userFound.getTessera().getNumero_tessera());
                                             System.out.println("Tessera " + t + " rinnovata con successo! ");
                                             int sceltaAbbonamento;
                                             do {
-                                                System.out.println("Vuoi acquistare un abbonamento?\nsi,no ");
-                                                sceltaAbbonamento = Autogestionale.menuSelezione(scanner, "Vuoi acquistare un abbonamento?\nsi,no ");
+                                                System.out.println("Vuoi acquistare un abbonamento?");
+                                                sceltaAbbonamento = Autogestionale.menuSelezione(scanner, "si,no ");
                                                 switch (sceltaAbbonamento) {
                                                     case 1:
-                                                        TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
+                                                        System.out.println("Scegli il tipo di abbonamento:");
+                                                        TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Settimanale,Mensile,Annuale ")) {
                                                             case 2 -> TipiAbbonamento.MENSILE;
                                                             case 3 -> TipiAbbonamento.ANNUALE;
                                                             default -> TipiAbbonamento.SETTIMANALE;
@@ -245,11 +247,12 @@ public class Application {
                             } else if (userFound.getTessera().getAbbonamento().getData_scadenza().isBefore(LocalDate.now())) {
                                 int sceltaRinnovoAbbonamento;
                                 do {
-                                    System.out.println("Il tuo abbonamento é scaduto, vuoi rinnovarlo?\nsi,no ");
-                                    sceltaRinnovoAbbonamento = Autogestionale.menuSelezione(scanner, "Il tuo abbonamento é scaduto, vuoi rinnovarlo?\nsi,no ");
+                                    System.out.println("Il tuo abbonamento é scaduto, vuoi rinnovarlo? ");
+                                    sceltaRinnovoAbbonamento = Autogestionale.menuSelezione(scanner, "si,no ");
                                     switch (sceltaRinnovoAbbonamento) {
                                         case 1:
-                                            TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
+                                            System.out.println("Scegli il tipo di abbonamento:");
+                                            TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Settimanale,Mensile,Annuale ")) {
                                                 case 2 -> TipiAbbonamento.MENSILE;
                                                 case 3 -> TipiAbbonamento.ANNUALE;
                                                 default -> TipiAbbonamento.SETTIMANALE;
@@ -267,11 +270,12 @@ public class Application {
                             } else if (userFound.getTessera().getAbbonamento() == null) {
                                 int sceltaAcquistoAbbonamento;
                                 do {
-                                    System.out.println("Vuoi acquistare il tuo primo abbonamento?\nsi,no ");
-                                    sceltaAcquistoAbbonamento = Autogestionale.menuSelezione(scanner, "Vuoi acquistare il tuo primo abbonamento?\nsi,no ");
+                                    System.out.println("Vuoi acquistare il tuo primo abbonamento? ");
+                                    sceltaAcquistoAbbonamento = Autogestionale.menuSelezione(scanner, "si,no ");
                                     switch (sceltaAcquistoAbbonamento) {
                                         case 1:
-                                            TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
+                                            System.out.println("Scegli il tipo di abbonamento:");
+                                            TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Settimanale,Mensile,Annuale ")) {
                                                 case 2 -> TipiAbbonamento.MENSILE;
                                                 case 3 -> TipiAbbonamento.ANNUALE;
                                                 default -> TipiAbbonamento.SETTIMANALE;
@@ -290,8 +294,8 @@ public class Application {
                         } else {
                             int sceltaCreazioneTessera;
                             do {
-                                System.out.println("Non hai la tessera, vuoi crearla?\nsi,no ");
-                                sceltaCreazioneTessera = Autogestionale.menuSelezione(scanner, "Non hai la tessera, vuoi crearla?\nsi,no ");
+                                System.out.println("Non hai la tessera, vuoi crearla? ");
+                                sceltaCreazioneTessera = Autogestionale.menuSelezione(scanner, "si,no ");
                                 switch (sceltaCreazioneTessera) {
                                     case 1:
                                         Tessera t = new Tessera(userFound);
@@ -299,11 +303,12 @@ public class Application {
                                         System.out.println("Tessera " + t + " creata con successo! ");
                                         int sceltaAcquistoAbbonamento;
                                         do {
-                                            System.out.println("Vuoi acquistare un abbonamento?\nsi,no ");
-                                            sceltaAcquistoAbbonamento = Autogestionale.menuSelezione(scanner, "Vuoi acquistare un abbonamento?\nsi,no ");
+                                            System.out.println("Vuoi acquistare un abbonamento? ");
+                                            sceltaAcquistoAbbonamento = Autogestionale.menuSelezione(scanner, "si,no ");
                                             switch (sceltaAcquistoAbbonamento) {
                                                 case 1:
-                                                    TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
+                                                    System.out.println("Scegli il tipo di abbonamento:");
+                                                    TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Settimanale,Mensile,Annuale ")) {
                                                         case 2 -> TipiAbbonamento.MENSILE;
                                                         case 3 -> TipiAbbonamento.ANNUALE;
                                                         default -> TipiAbbonamento.SETTIMANALE;
@@ -330,8 +335,8 @@ public class Application {
                         if (userFound.getTessera() == null) {
                             int sceltaCreazioneTessera;
                             do {
-                                System.out.println("Non hai la tessera, vuoi crearla?\nsi,no ");
-                                sceltaCreazioneTessera = Autogestionale.menuSelezione(scanner, "Non hai la tessera, vuoi crearla?\nsi,no ");
+                                System.out.println("Non hai la tessera, vuoi crearla? ");
+                                sceltaCreazioneTessera = Autogestionale.menuSelezione(scanner, "si,no ");
                                 switch (sceltaCreazioneTessera) {
                                     case 1:
                                         Tessera t = new Tessera(userFound);
@@ -347,11 +352,12 @@ public class Application {
                             if (userFound.getTessera().getAbbonamento().getData_scadenza().isBefore(LocalDate.now())) {
                                 int sceltaRinnovoAbbonamento;
                                 do {
-                                    System.out.println("Il tuo abbonamento é scaduto, vuoi rinnovarlo?\nsi,no ");
-                                    sceltaRinnovoAbbonamento = Autogestionale.menuSelezione(scanner, "Il tuo abbonamento é scaduto, vuoi rinnovarlo?\nsi,no ");
+                                    System.out.println("Il tuo abbonamento é scaduto, vuoi rinnovarlo? ");
+                                    sceltaRinnovoAbbonamento = Autogestionale.menuSelezione(scanner, "si,no ");
                                     switch (sceltaRinnovoAbbonamento) {
                                         case 1:
-                                            TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
+                                            System.out.println("Scegli il tipo di abbonamento:");
+                                            TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Settimanale,Mensile,Annuale ")) {
                                                 case 2 -> TipiAbbonamento.MENSILE;
                                                 case 3 -> TipiAbbonamento.ANNUALE;
                                                 default -> TipiAbbonamento.SETTIMANALE;

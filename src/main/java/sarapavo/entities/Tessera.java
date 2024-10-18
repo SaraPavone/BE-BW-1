@@ -29,7 +29,7 @@ public class Tessera {
     public Tessera(User user) {
         this.user = user;
         this.data_emissione = LocalDate.now();
-        this.data_scadenza = data_emissione.plusYears(1L);
+        this.data_scadenza = data_emissione.plusYears(1);
     }
 
     public long getNumero_tessera() {

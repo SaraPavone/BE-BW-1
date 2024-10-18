@@ -2,7 +2,6 @@ package sarapavo.entities;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,7 +17,7 @@ import java.util.List;
 @NamedQuery(name = "countTicketsAndSubscriptionsInTimeRange",
         query = "SELECT p, COUNT(b), COUNT(a) FROM PuntoEmissione p " +
                 "LEFT JOIN p.biglietti b LEFT JOIN p.abbonamenti a " +
-                "WHERE b.data BETWEEN :startDate AND :endDate GROUP BY p")
+                "WHERE b.data_vidimazione BETWEEN :startDate AND :endDate GROUP BY p")
 
 public abstract class PuntoEmissione {
 

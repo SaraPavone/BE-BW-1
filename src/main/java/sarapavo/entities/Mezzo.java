@@ -28,8 +28,8 @@ import java.util.List;
 
 @NamedQuery(name = "Mezzo.countValidatedTicketsInTimeRange",
         query = "SELECT m, COUNT(t) " +
-                "FROM Mezzo m JOIN m.validatedTickets t " +
-                "WHERE t.date " +
+                "FROM Mezzo m JOIN m.biglietti t " +
+                "WHERE t.data_vidimazione " +
                 "BETWEEN :startDate AND :endDate GROUP BY m")
 public class Mezzo {
 
@@ -61,13 +61,11 @@ public class Mezzo {
     public Mezzo() {
     }
 
-    public Mezzo(TipoMezzi mezzo, boolean manutenzione, List<Tratta> tratte, ParcoMezzi parcomezzi, List<Biglietto> biglietti) {
+    public Mezzo(TipoMezzi mezzo, boolean manutenzione, ParcoMezzi parcomezzi) {
         this.mezzo = mezzo;
         this.capienza_massima = mezzo.equals(TipoMezzi.TRAM) ? 40 : mezzo.equals(TipoMezzi.AUTOBUS) ? 60 : 0;
         this.manutenzione = manutenzione;
-        this.tratte = tratte;
         this.parcomezzi = parcomezzi;
-        this.biglietti = biglietti;
     }
 
 

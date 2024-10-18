@@ -12,13 +12,10 @@ public class ParcoMezzi {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToMany(mappedBy = "parcomezzi",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parcomezzi", cascade = CascadeType.ALL)
     private List<Mezzo> mezzi;
 
-    public ParcoMezzi() {}
-
-    public ParcoMezzi(List<Mezzo> mezzi) {
-        this.mezzi = mezzi;
+    public ParcoMezzi() {
     }
 
     public long getId() {
