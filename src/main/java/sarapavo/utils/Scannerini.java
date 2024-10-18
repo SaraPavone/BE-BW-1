@@ -42,6 +42,8 @@ public class Scannerini {
 
 
     public static void visualizzaStatistiche(Scanner scanner, DaoPE daope, DaoMezzi mezziDao, GenericDao dao) {
+        System.out.println("Numero di abbonamenti emessi per punto di emissione: ");
+        daope.getNumeroAbbonamenti();
         System.out.println("Numero di biglietti emessi per punto di emissione: ");
         daope.conteggioBigliettiEmessiPerPE();
         System.out.println("Numero di biglietti vidimati per mezzo: ");
@@ -120,7 +122,7 @@ public class Scannerini {
                     long idMezzo;
                     Mezzo mezzoF;
                     do {
-                        System.out.println ("Inserisci l'ID del mezzo su cui vuoi salire: ");
+                        System.out.println("Inserisci l'ID del mezzo su cui vuoi salire: ");
                         idMezzo = Long.parseLong(scanner.nextLine());
                         mezzoF = dao.getElementById(Mezzo.class, idMezzo);
                         if (mezzoF == null) {
@@ -149,7 +151,30 @@ public class Scannerini {
         } while (sceltaBiglietto < 1 || sceltaBiglietto > 2);
     }
 
+    public static void acquistoTessera(Scanner scanner, GenericDao dao, User userFound) {
+        Tessera tessera = new Tessera(userFound);
+        dao.save(tessera);
+        System.out.println("Tessera " + tessera + " salvata con successo!");
+    }
 
+    public static void acquistareAbbonamento(Scanner scanner, GenericDao dao, User userFound) {
+
+        if (userFound.getTessera() == null) {
+            System.out.println("Non hai una tessera. Devi prima acquistarne una.");
+            return;
+        }
+
+        TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Scegli il tipo di abbonamento:\nSettimanale,Mensile,Annuale ")) {
+            case 2 -> TipiAbbonamento.MENSILE;
+            case 3 -> TipiAbbonamento.ANNUALE;
+            default -> TipiAbbonamento.SETTIMANALE;
+        };
+
+        Abbonamento nuovoAbbonamento = new Abbonamento(userFound.getTessera(), tipo, null); // null per il punto di emissione, se necessario
+        dao.save(nuovoAbbonamento);
+        dao.update(userFound.getTessera(), "abbonamento", nuovoAbbonamento, "numero_tessera", userFound.getTessera().getNumero_tessera());
+        System.out.println("Abbonamento " + nuovoAbbonamento + " creato con successo!");
+    }
 
 
     public static void acquistareBiglietto(Scanner scanner, GenericDao dao, User userFound) {
@@ -167,134 +192,42 @@ public class Scannerini {
                 System.out.println("ID del punto vendita non valido, riprova.");
             }
         } while (puntoEmissioneF == null);
-        if (userFound.getTessera() != null) {
-            if (userFound.getTessera().getData_scadenza().isBefore(LocalDate.now())) {
-                int sceltaRinnovo;
-                do {
-                    System.out.println("La tua tessera é scaduta vuoi rinnovarla?");
-                    sceltaRinnovo = Autogestionale.menuSelezione(scanner, "si,no ");
-                    switch (sceltaRinnovo) {
-                        case 1:
-                            Tessera t = new Tessera(userFound);
-                            dao.update(userFound.getTessera(), "data_emissione", LocalDate.now(), "id", userFound.getTessera().getNumero_tessera());
-                            dao.update(userFound.getTessera(), "data_scadenza", LocalDate.now().plusYears(1), "id", userFound.getTessera().getNumero_tessera());
-                            System.out.println("Tessera " + t + " rinnovata con successo! ");
-                            int sceltaAbbonamento;
-                            do {
-                                System.out.println("Vuoi acquistare un abbonamento?");
-                                sceltaAbbonamento = Autogestionale.menuSelezione(scanner, "si,no ");
-                                switch (sceltaAbbonamento) {
-                                    case 1:
-                                        System.out.println("Scegli il tipo di abbonamento:");
-                                        TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Settimanale,Mensile,Annuale ")) {
-                                            case 2 -> TipiAbbonamento.MENSILE;
-                                            case 3 -> TipiAbbonamento.ANNUALE;
-                                            default -> TipiAbbonamento.SETTIMANALE;
-                                        };
-                                        Abbonamento newAbb = new Abbonamento(t, tipo, puntoEmissioneF);
-                                        dao.save(newAbb);
-                                        dao.update(userFound.getTessera(), "abbonamento", newAbb, "numero_tessera", userFound.getTessera().getNumero_tessera());
-                                        System.out.println("Abbonamento " + newAbb + " creato con successo!");
-                                        break;
-                                    case 2:
-                                        System.out.println("Uscito dal sistema!");
-                                        break;
-                                }
-                            } while (sceltaAbbonamento < 1 || sceltaAbbonamento > 2);
-                            break;
-                        case 2:
-                            System.out.println("Uscito dal sistema!");
-                            break;
-                    }
-                } while (sceltaRinnovo < 1 || sceltaRinnovo > 2);
-            } else if (userFound.getTessera().getAbbonamento().getData_scadenza().isBefore(LocalDate.now())) {
-                int sceltaRinnovoAbbonamento;
-                do {
-                    System.out.println("Il tuo abbonamento é scaduto, vuoi rinnovarlo? ");
-                    sceltaRinnovoAbbonamento = Autogestionale.menuSelezione(scanner, "si,no ");
-                    switch (sceltaRinnovoAbbonamento) {
-                        case 1:
-                            System.out.println("Scegli il tipo di abbonamento:");
-                            TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Settimanale,Mensile,Annuale ")) {
-                                case 2 -> TipiAbbonamento.MENSILE;
-                                case 3 -> TipiAbbonamento.ANNUALE;
-                                default -> TipiAbbonamento.SETTIMANALE;
-                            };
-                            Abbonamento newAbb = new Abbonamento(userFound.getTessera(), tipo, puntoEmissioneF);
-                            dao.save(newAbb);
-                            dao.update(userFound.getTessera(), "abbonamento", newAbb, "numero_tessera", userFound.getTessera().getNumero_tessera());
-                            System.out.println("Abbonamento " + newAbb + " creato con successo!");
-                            break;
-                        case 2:
-                            System.out.println("Uscito dal sistema!");
-                            break;
-                    }
-                } while (sceltaRinnovoAbbonamento < 1 || sceltaRinnovoAbbonamento > 2);
-            } else if (userFound.getTessera().getAbbonamento() == null) {
-                int sceltaAcquistoAbbonamento;
-                do {
-                    System.out.println("Vuoi acquistare il tuo primo abbonamento? ");
-                    sceltaAcquistoAbbonamento = Autogestionale.menuSelezione(scanner, "si,no ");
-                    switch (sceltaAcquistoAbbonamento) {
-                        case 1:
-                            System.out.println("Scegli il tipo di abbonamento:");
-                            TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Settimanale,Mensile,Annuale ")) {
-                                case 2 -> TipiAbbonamento.MENSILE;
-                                case 3 -> TipiAbbonamento.ANNUALE;
-                                default -> TipiAbbonamento.SETTIMANALE;
-                            };
-                            Abbonamento newAbb = new Abbonamento(userFound.getTessera(), tipo, puntoEmissioneF);
-                            dao.save(newAbb);
-                            dao.update(userFound.getTessera(), "abbonamento", newAbb, "numero_tessera", userFound.getTessera().getNumero_tessera());
-                            System.out.println("Abbonamento " + newAbb + " creato con successo!");
-                            break;
-                        case 2:
-                            System.out.println("Uscito dal sistema!");
-                            break;
-                    }
-                } while (sceltaAcquistoAbbonamento < 1 || sceltaAcquistoAbbonamento > 2);
-            }
-        } else {
-            int sceltaCreazioneTessera;
-            do {
-                System.out.println("Non hai la tessera, vuoi crearla? ");
-                sceltaCreazioneTessera = Autogestionale.menuSelezione(scanner, "si,no ");
-                switch (sceltaCreazioneTessera) {
-                    case 1:
-                        Tessera t = new Tessera(userFound);
-                        dao.save(t);
-                        System.out.println("Tessera " + t + " creata con successo! ");
-                        int sceltaAcquistoAbbonamento;
-                        do {
-                            System.out.println("Vuoi acquistare un abbonamento? ");
-                            sceltaAcquistoAbbonamento = Autogestionale.menuSelezione(scanner, "si,no ");
-                            switch (sceltaAcquistoAbbonamento) {
-                                case 1:
-                                    System.out.println("Scegli il tipo di abbonamento:");
-                                    TipiAbbonamento tipo = switch (Autogestionale.menuSelezione(scanner, "Settimanale,Mensile,Annuale ")) {
-                                        case 2 -> TipiAbbonamento.MENSILE;
-                                        case 3 -> TipiAbbonamento.ANNUALE;
-                                        default -> TipiAbbonamento.SETTIMANALE;
-                                    };
-                                    Abbonamento newAbb = new Abbonamento(t, tipo, puntoEmissioneF);
-                                    dao.save(newAbb);
-                                    dao .update(userFound.getTessera(), "abbonamento", newAbb, "numero_tessera", userFound.getTessera().getNumero_tessera());
-                                    System.out.println("Abbonamento " + newAbb + " creato con successo!");
-                                    break;
-                                case 2:
-                                    System.out.println("Uscito dal sistema!");
-                                    break;
-                            }
-                        } while (sceltaAcquistoAbbonamento < 1 || sceltaAcquistoAbbonamento > 2);
-                        break;
-                    case 2:
-                        System.out.println("Uscito dal sistema!");
-                        break;
-                }
-            } while (sceltaCreazioneTessera < 1 || sceltaCreazioneTessera > 2);
-        }
-    }
 
+        // Procedi con l'acquisto del biglietto
+        long idMezzo;
+        Mezzo mezzoF;
+        do {
+            for (Tratta i : dao.findAll(Tratta.class)) {
+                System.out.println(i.toString());
+            }
+            System.out.println("Inserisci l'ID del mezzo su cui vuoi salire: ");
+            idMezzo = Long.parseLong(scanner.nextLine());
+            mezzoF = dao.getElementById(Mezzo.class, idMezzo);
+            if (mezzoF == null) {
+                System.out.println("ID del mezzo non valido, riprova.");
+            }
+        } while (mezzoF == null);
+        Biglietto bigliettoAcquistato = new Biglietto(puntoEmissioneF, mezzoF);
+        dao.save(bigliettoAcquistato);
+        System.out.println("Biglietto n: " + bigliettoAcquistato.getId() + " acquistato con successo!");
+
+        // Chiedi se l'utente vuole vidimare il biglietto
+        int sceltaVidimazione;
+        do {
+            System.out.println("Vuoi vidimare il biglietto? ");
+            sceltaVidimazione = Autogestionale.menuSelezione(scanner, "si,no ");
+            switch (sceltaVidimazione) {
+                case 1:
+                    bigliettoAcquistato.setData_vidimazione(LocalDate.now());
+                    dao.update(bigliettoAcquistato, "data_vidimazione", bigliettoAcquistato.getData_vidimazione(), "id", bigliettoAcquistato.getId());
+                    System.out.println("Biglietto vidimato con successo! ");
+                    break;
+                case 2:
+                    System.out.println("Biglietto non vidimato.");
+                    break;
+            }
+        } while (sceltaVidimazione < 1 || sceltaVidimazione > 2);
+    }
 
 
     public static void verificaAbbonamento(Scanner scanner, GenericDao dao, User userFound) {
@@ -345,7 +278,6 @@ public class Scannerini {
             }
         }
     }
-
 
 
 }

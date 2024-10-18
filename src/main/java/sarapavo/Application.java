@@ -4,12 +4,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import sarapavo.dao.*;
-import sarapavo.entities.*;
-import sarapavo.entities.enums.TipiAbbonamento;
+import sarapavo.entities.User;
 import sarapavo.utils.Autogestionale;
 import sarapavo.utils.Scannerini;
 
-import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Application {
@@ -44,7 +42,7 @@ public class Application {
                 // Menu per amministratori
                 int scelta;
                 do {
-                    scelta = Autogestionale.menuSelezione(scanner, "Gestione mezzi,Statistiche,Esci");
+                    scelta = Autogestionale.menuSelezione(scanner, "Gestione mezzi,Statistiche");
                     switch (scelta) {
                         case 1:
                             Scannerini.gestisciMezzi(scanner, dao);
@@ -62,25 +60,30 @@ public class Application {
             } else {
                 // Menu per utenti normali
                 int sceltaUtente;
+                boolean flag = false;
                 do {
-                    sceltaUtente = Autogestionale.menuSelezione(scanner, "Vidimare,Acquistare,Verifica abbonamento,Esci");
+                    sceltaUtente = Autogestionale.menuSelezione(scanner, "Vidimare,Acquistare biglietto,Verifica abbonamento,Acquista tessera,Acquista Abbonamento");
                     switch (sceltaUtente) {
                         case 1:
                             Scannerini.vidimareBiglietto(scanner, dao);
                             break;
                         case 2:
                             Scannerini.acquistareBiglietto(scanner, dao, userFound);
+                            System.out.println("ciao");
                             break;
                         case 3:
                             Scannerini.verificaAbbonamento(scanner, dao, userFound);
                             break;
                         case 4:
-                            System.out.println("Uscita dal menu utente.");
+                            Scannerini.acquistoTessera(scanner, dao, userFound);
+                            break;
+                        case 5:
+                            Scannerini.acquistareAbbonamento(scanner, dao, userFound);
                             break;
                         default:
                             System.out.println("Scelta non valida, riprova.");
                     }
-                } while (sceltaUtente != 4);
+                } while (sceltaUtente != 6);
             }
         }
     }
